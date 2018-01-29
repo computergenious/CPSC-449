@@ -16,6 +16,7 @@ public class mainIO {
 		while (fileScanner.haxNext()) {
 			
 			String nextLine = fileScanner.nextLine();
+			nextLine = nextLine.trim();
 			
 			if (nextLine == "forced partial assingnment:") {
 				
