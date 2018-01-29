@@ -50,7 +50,7 @@ public class mainIO {
 				}
 			}
 			
-			else if (nextLine == "forbidden machine:")
+			if (nextLine == "forbidden machine:")
 			{
 				
 			}
