@@ -13,7 +13,7 @@ public class mainIO {
 		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
 		Scanner fileScanner = new Scanner(fileInput);
 		
-		while (fileScanner.haxNext()) {
+		while (fileScanner.hasNext()) {
 			
 			String nextLine = fileScanner.nextLine();
 			nextLine = nextLine.trim();
