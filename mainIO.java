@@ -1,8 +1,14 @@
-// 
+/*
+ * CPSC 449 Assignment 1
+ * 
+ * 
+ * 
+ * 
+ */
 
 //import necessary files
 import java.io.*;
-import java.util.scanner;
+import java.util.Scanner;
 
 
 public class mainIO {
@@ -14,11 +20,14 @@ public class mainIO {
 		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
 		Scanner fileScanner = new Scanner(fileInput);
 		
-		//initialized the force assignment array
+		//initialized the force assignment array, penalty array
 		int[] forcedAssignArray;
+		int[][] penaltyArray = new int[8][8];
+		
+		
 				
 		// while loop to move through the file and check 
-		while (fileScanner.haxNext()) {
+		while (fileScanner.hasNext()) {
 			
 			//assigns the next line to a string to be read and trims it
 			String nextLine = fileScanner.nextLine();
@@ -73,11 +82,58 @@ public class mainIO {
 				}
 			}
 			
+			
+			
+			
+			
 			if (nextLine == "forbidden machine:")
 			{
 				
 			}
+			
+			
+			
+			
+			
+			
+			if (nextLine == "machine penalties:") {
+				for (int i = 0; i < 8; i++) {						//Go though 8 rows
+					nextLine = fileScanner.nextLine();
+					if (nextLine == "\n") {						//If there is an empty row
+						
+						//MACHINE PENALTY ERROR
+						
+					} else {
+						
+						String[] tempArray = nextLine.split(" ", 9);	//Splits first row into array
+						
+						if (tempArray.length == 8) {
+							
+							
+							for (int q = 0; q < 8; q++) {				//Loop through each column
+								try {						//Try converting to Int
+									int val = Integer.parseInt(tempArray[q]);
+									if (val > -1) {
+										penaltyArray[i][q] = val;
+									} else {
+										//PENALTY ERROR, LESS THAN 0
+									}
+								} catch (NumberFormatException e) {
+									//PENALTY ERROR, NOT AN INT
+								}
+							}//End of column
+							
+							
+						} else {
+							//MACHINE PENALTY ERROR
+						}
+						
+					}
+				}
+			}//End of machine penalties
+			
 				
-		}
+		}//End of while loop for reading file
+		
 	}
 }
