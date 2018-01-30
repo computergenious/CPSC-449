@@ -96,41 +96,48 @@ public class mainIO {
 			
 			
 			
+						/*
+			 * Brief description of code:
+			 * 1 - if line is equal to "machine penalties"
+			 * 2 - Read through 8 lines, check if next Line is "\n"(Missing row)
+			 * 3 - Split the row into an array of strings
+			 * 4 - Checks if there are exactly 8 elements    (Not enough or too many values)
+			 * 5 - Attempt to convert each value to Integer  (Not a number)
+			 * 6 - Checks if the value is greater than 0     (Natural number)
+			 * 
+			 */
 			if (nextLine == "machine penalties:") {
-				for (int i = 0; i < 8; i++) {						//Go though 8 rows
-					nextLine = fileScanner.nextLine();
-					if (nextLine == "\n") {						//If there is an empty row
+				for (int i = 0; i < 8; i++) {							//Go though 8 rows
+					nextLine = fileScanner.nextLine();					//Read Line
+					if (nextLine != "\n") {								//If there is an empty row
 						
-						//MACHINE PENALTY ERROR
-						
-					} else {
 						
 						String[] tempArray = nextLine.split(" ", 9);	//Splits first row into array
 						
 						if (tempArray.length == 8) {
 							
-							
 							for (int q = 0; q < 8; q++) {				//Loop through each column
-								try {						//Try converting to Int
+								try {									//Try converting to Int
 									int val = Integer.parseInt(tempArray[q]);
-									if (val > -1) {
+									if (val > -1) {						//If value greater than 0
 										penaltyArray[i][q] = val;
 									} else {
-										//PENALTY ERROR, LESS THAN 0
+										//PENALTY ERROR - LESS THAN ZERO
 									}
 								} catch (NumberFormatException e) {
-									//PENALTY ERROR, NOT AN INT
+									//PENALTY ERROR - NOT AN INTEGER
 								}
-							}//End of column
-							
+							}
 							
 						} else {
-							//MACHINE PENALTY ERROR
+							//MACHINE PENALTY ERROR - DOESN'T HAVE 8 VALUES
 						}
-						
+					} else {
+						//MACHINE PENALTY ERROR - MISSING ROW
 					}
-				}
+				}//Exits after reading 8 lines
 			}//End of machine penalties
+			
 			
 				
 		}//End of while loop for reading file
