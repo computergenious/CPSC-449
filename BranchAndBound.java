@@ -31,6 +31,7 @@ public class BranchAndBound {
                     // if best node not yet set(not all machines assigned a task
                     // of if subtree rooted at newly created node has a smaller
                     // penalty then the current best
+                    
                     //if(best == null || child.getPenaltyPoints() < best.getPenaltyPoints())
                     if(best == null || child.penalty() < best.penalty()) {
                         // create subtree of new node recursively
@@ -39,7 +40,6 @@ public class BranchAndBound {
                         // if subtree node has a better penalty then the current best node
                         // assign the best node to be the subtree node
 
-                        //NOTE: different versions shown on how to acheive this
                         int nextNodePenalty;
                         if(nextNode == null) { // try moving into next if-statement to create nested
                             nextNodePenalty = Integer.MAX_VALUE;
