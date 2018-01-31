@@ -88,6 +88,23 @@ public class mainIO {
 			
 			if (nextLine == "forbidden machine:")
 			{
+				boolean[][] forbidden = new boolean[8][8];
+				//reads through the next (max) 8 lines for the data
+				for ( int i=0; i < 8; i++) 
+				{
+					nextLine = fileScanner.nextLine();
+				//checks if there is no more data
+					if (nextLine == "\n") break;
+					
+				//replace everything except numbers to blank
+					String currentLine = nextLine.replaceAll("\\D+", "");
+				//grab mach and task numbers
+					int mach = Character.getNumericValue(currentLine.charAt(0));
+					int task = Character.getNumericValue(currentLine.charAt(1));
+					
+				//change element to true
+					forbidden[mach][task] = True;
+				}
 				
 			}
 			
