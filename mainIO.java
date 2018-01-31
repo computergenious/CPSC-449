@@ -98,12 +98,18 @@ public class mainIO {
 					
 				//replace everything except numbers to blank
 					String currentLine = nextLine.replaceAll("\\D+", "");
-				//grab mach and task numbers
+				//invalid task check
+					if(Character.getNumericValue(currentLine.charAt(0)) > 8 || Character.getNumericValue(currentLine.charAt(1)) > 8)
+					{
+						System.out.println("Invalid task");
+						break;
+					}
+				//grab machine and task as ints
 					int mach = Character.getNumericValue(currentLine.charAt(0));
 					int task = Character.getNumericValue(currentLine.charAt(1));
 					
 				//change element to true
-					forbidden[mach][task] = True;
+					forbidden[mach-1][task-1] = True;
 				}
 				
 			}
