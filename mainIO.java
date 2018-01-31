@@ -23,7 +23,7 @@ public class mainIO {
 		//initialized the force assignment array, penalty array
 		int[] forcedAssignArray;
 		int[][] penaltyArray = new int[8][8];
-		
+		boolean[][] forbidden = new boolean[8][8];
 		
 				
 		// while loop to move through the file and check 
@@ -88,7 +88,7 @@ public class mainIO {
 			
 			if (nextLine == "forbidden machine:")
 			{
-				boolean[][] forbidden = new boolean[8][8];
+				
 				//reads through the next (max) 8 lines for the data
 				for ( int i=0; i < 8; i++) 
 				{
@@ -98,15 +98,17 @@ public class mainIO {
 					
 				//replace everything except numbers to blank
 					String currentLine = nextLine.replaceAll("\\D+", "");
-				//invalid task check
-					if(Character.getNumericValue(currentLine.charAt(0)) > 8 || Character.getNumericValue(currentLine.charAt(1)) > 8)
-					{
-						System.out.println("Invalid task");
-						break;
-					}
+					
 				//grab machine and task as ints
 					int mach = Character.getNumericValue(currentLine.charAt(0));
 					int task = Character.getNumericValue(currentLine.charAt(1));
+				//invalid task check
+					if((mach > 8 || mach < 1) || (task > 8 || task < 1) )
+					{
+						System.out.println("Invalid machine/task");
+						break;
+					}
+				
 					
 				//change element to true
 					forbidden[mach-1][task-1] = True;
