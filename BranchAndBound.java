@@ -32,8 +32,8 @@ public class BranchAndBound {
                     // of if subtree rooted at newly created node has a smaller
                     // penalty then the current best
                     
-                    //if(best == null || child.getPenaltyPoints() < best.getPenaltyPoints())
-                    if(best == null || child.penalty() < best.penalty()) {
+                    if(best == null || child.getPenaltyPoints() < best.getPenaltyPoints()) {
+                    //if(best == null || child.penalty() < best.penalty()) {
                         // create subtree of new node recursively
                         Node nextNode = branchAndBound(child, best, forbidden, tooNear);
 
@@ -41,7 +41,7 @@ public class BranchAndBound {
                         // assign the best node to be the subtree node
 
                         // created method in node class to do this and also keeps track of penalty points for nodes when they are created 
-                        int nextNodePenalty;
+                        /*int nextNodePenalty;
                         if(nextNode == null) { // try moving into next if-statement to create nested
                             nextNodePenalty = Integer.MAX_VALUE;
                         } else {
@@ -49,16 +49,16 @@ public class BranchAndBound {
                         }
                         if(best == null || nextNodePenalty < best.penalty()) {
                             best = nextNode;
-                        }
+                        }*/
 
                         /*if(best == null || nextNode.penalty() < best.penalty()) {
                             best = nextNode;
                         }*/
 
                         // personally preferred version of if-statement
-                        /*if(best == null || nextNode.getPenaltyPoints() < best.getPenaltyPoints()) {
+                        if(best == null || nextNode.getPenaltyPoints() < best.getPenaltyPoints()) {
                             best = nextNode;
-                        }*/
+                        }
 
                     }
                 }
