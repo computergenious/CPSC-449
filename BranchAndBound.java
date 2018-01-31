@@ -40,6 +40,7 @@ public class BranchAndBound {
                         // if subtree node has a better penalty then the current best node
                         // assign the best node to be the subtree node
 
+                        // created method in node class to do this and also keeps track of penalty points for nodes when they are created 
                         int nextNodePenalty;
                         if(nextNode == null) { // try moving into next if-statement to create nested
                             nextNodePenalty = Integer.MAX_VALUE;
@@ -54,6 +55,7 @@ public class BranchAndBound {
                             best = nextNode;
                         }*/
 
+                        // personally preferred version of if-statement
                         /*if(best == null || nextNode.getPenaltyPoints() < best.getPenaltyPoints()) {
                             best = nextNode;
                         }*/
