@@ -15,10 +15,16 @@ public class mainIO {
 	
 	public static void main (String[] args) {
 	
+		try {
 		// initializes the main file reader and writer as well as the file scanner
 		BufferedReader fileInput = new BufferedReader(new FileReader(args[0]));
 		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
 		Scanner fileScanner = new Scanner(fileInput);
+		}
+		
+		catch (IOException e) {
+			System.out.println("Input file not found");
+		}
 		
 		//initialized the force assignment array, penalty array, etc.
 		int[] forcedAssignArray;
