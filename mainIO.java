@@ -44,7 +44,7 @@ public class mainIO {
 			}
 			
 			//checks and initializes the forced partial assignment array
-			if (nextLine == "forced partial assingnment:" ^ flag == 1) {
+			if (nextLine == "forced partial assingnment:" && flag == 1) {
 				
 				//initialize the 
 				for (int i=0;  i < 8; i++) 
@@ -212,6 +212,7 @@ public class mainIO {
 						//MACHINE PENALTY ERROR - MISSING ROW
 					}
 				}//Exits after reading 8 lines
+				flag++;
 			}//End of machine penalties
 			
 			
