@@ -9,31 +9,35 @@
 //import necessary files
 import java.io.*;
 import java.util.Scanner;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class mainIO {
 	
 	public static void main (String[] args) {
 	
-		Scanner fileScanner = null;
-		
-		try {
 		// initializes the main file reader and writer as well as the file scanner
 		BufferedReader fileInput = new BufferedReader(new FileReader(args[0]));
 		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
-		fileScanner = new Scanner(fileInput);
-		}
-		
-		catch (IOException e) {
-			System.out.println("Input file not found");
-		}
+		Scanner fileScanner = new Scanner(fileInput);
 		
 		//initialized the force assignment array, penalty array, etc.
-		int[] forcedAssignArray = new int[8];
+		int[] forcedAssignArray;
 		int[][] penaltyArray = new int[8][8];
 		boolean[][] forbidden = new boolean[8][8];
 		boolean[][] tooNear = new boolean[8][8];
 		int flag = 0;
+		
+		//map A-H to 1-8
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("A", "1");
+		map.put("B", "2");
+		map.put("C", "3");
+		map.put("D", "4");
+		map.put("E", "5");
+		map.put("F", "6");
+		map.put("G", "7");
+		map.put("H", "8");
 				
 		// while loop to move through the file and check 
 		while (fileScanner.hasNext()) {
@@ -132,12 +136,14 @@ public class mainIO {
 				//checks if there is no more data
 					if (nextLine == "\n") break;
 					
-				//replace everything except numbers to blank
-					String currentLine = nextLine.replaceAll("\\D+", "");
+				//replace everything except numbers to commas
+					String currentLine = nextLine.replaceAll("[^-?0-9]", ",");
+					currentLine = currentLine.replaceAll("(,)+", ",");
 					
-				//grab machine and task as ints
-					int mach = Character.getNumericValue(currentLine.charAt(0));
-					int task = Character.getNumericValue(currentLine.charAt(1));
+				//split string and grab machine and task as ints
+					String[] split = currentLine.split(",");
+					int mach = Integer.valueOf(split[1]);
+					int task = Integer.valueOf(map.get(split[2]));
 				//invalid task check
 					if((mach > 8 || mach < 1) || (task > 8 || task < 1) )
 					{
@@ -161,12 +167,14 @@ public class mainIO {
 				//checks if there is no more data
 					if (nextLine == "\n") break;
 					
-				//replace everything except numbers to blank
-					String currentLine = nextLine.replaceAll("\\D+", "");
+				//replace everything except numbers to commas
+					String currentLine = nextLine.replaceAll("[^-?0-9]", ",");
+					currentLine = currentLine.replaceAll("(,)+", ",");
 					
-				//grab machine and task as ints
-					int task1 = Character.getNumericValue(currentLine.charAt(0));
-					int task2 = Character.getNumericValue(currentLine.charAt(1));
+				//split string and grab machine and task as ints
+					String[] split = currentLine.split(",");
+					int task = Integer.valueOf(map.get(split[1]));
+					int task = Integer.valueOf(map.get(split[2]));
 				//invalid task check
 					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1) )
 					{
@@ -178,7 +186,7 @@ public class mainIO {
 				//change element to true
 					tooNear[task1-1][task2-1] = true;
 				}
-				flag++;
+				flag++
 			}
 			
 			
