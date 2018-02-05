@@ -20,11 +20,12 @@ public class mainIO {
 		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
 		Scanner fileScanner = new Scanner(fileInput);
 		
-		//initialized the force assignment array, penalty array
+		//initialized the force assignment array, penalty array, etc.
 		int[] forcedAssignArray;
 		int[][] penaltyArray = new int[8][8];
 		boolean[][] forbidden = new boolean[8][8];
 		boolean[][] tooNear = new boolean[8][8];
+		int flag = 0;
 				
 		// while loop to move through the file and check 
 		while (fileScanner.hasNext()) {
@@ -33,53 +34,76 @@ public class mainIO {
 			String nextLine = fileScanner.nextLine();
 			nextLine = nextLine.trim();
 			
+			
+			
+			//name check
+			if (nextLine == "Name:"){
+				fileScanner.nextLine();
+				nextLine = fileScanner.nextLine();
+				flag++;
+			}
+			
 			//checks and initializes the forced partial assignment array
-			if (nextLine == "forced partial assingnment:") {
+			if (nextLine == "forced partial assingnment:" ^ flag == 1) {
 				
-				
+				//initialize the 
 				for (int i=0;  i < 8; i++) 
 				{
 					forcedAssignArray[i] = -1;
 				}
-				
+
 				//initialized the arraylist for 1 task two machine error
-				ArrayList oneTaskTwoMachine = new ArrayList;
+				ArrayList oneTaskTwoMachine = new ArrayList();
+				//initialize the string for the current line
+				String currentLine;
 				
 				//reads through the next (max) 8 lines for the data
 				for ( int i=0; i < 8; i++) 
 				{
-					//progresses down one line to the data
+					//progresses down one line to the data we want
 					nextLine = fileScanner.nextLine();
-				
+					currentLine = nextLine.replaceAll("\\D+", "");//deletes everything except numbers
 					
 					//checks if there is no more data
 					if (nextLine == "\n") break;
 					
 					//format the data to be easier to use
-					dataLine = nextLine.replaceAll("(", "");
-					dataLine = nextLine.replaceAll(",", " ");
-					dataLine = nextLine.replaceAll(")", "");
-					int mach = fileScanner.nextInt(dataLine);
-					int task = fileScanner.nextInt(dataLine);
+					int mach = Character.getNumericValue(currentLine.charAt(0));
+					int task = Character.getNumericValue(currentLine.charAt(1));
+					
+					//check if there is a machine or task outside the usable values
+					if (mach > 8) {
+						//thrown invalideMachine exception
+						break;
+					}
+					if (task > 8) {
+						//throw invalidTask exception
+						break;
+					}
 					
 					//check for two task one machine error
 					if (forcedAssignArray[mach] != -1)
 					{
-						//throw exception
+						//throw twotaskonemachine exception
 						break;
 					}
+					
+					//check for one task two machine error
+					if (oneTaskTwoMachine.contains(task))
+					{
+						//throw onetasktwomachine exception
+						break;
+					}
+					
 					else 
 					{
-						//check for one task two machine error
-						if (oneTaskTwoMachine.contains(task))
-							//throw exception
-							break;
-							
+						//if no errors are thrown adds the value to the arrays
 						oneTaskTwoMachine.add(task);
-						
 						forcedAssignArray[mach] = task;
 					}
 				}
+				
+				flag++;
 			}
 			
 			
