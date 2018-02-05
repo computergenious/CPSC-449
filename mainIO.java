@@ -24,7 +24,7 @@ public class mainIO {
 		int[] forcedAssignArray;
 		int[][] penaltyArray = new int[8][8];
 		boolean[][] forbidden = new boolean[8][8];
-		
+		boolean[][] tooNear = new boolean[8][8];
 				
 		// while loop to move through the file and check 
 		while (fileScanner.hasNext()) {
@@ -118,7 +118,30 @@ public class mainIO {
 			
 			if (nextLine == "too-near tasks:")
 			{
+				//reads through the next (max) 8 lines for the data
+				for ( int i=0; i < 8; i++) 
+				{
+					nextLine = fileScanner.nextLine();
+				//checks if there is no more data
+					if (nextLine == "\n") break;
+					
+				//replace everything except numbers to blank
+					String currentLine = nextLine.replaceAll("\\D+", "");
+					
+				//grab machine and task as ints
+					int task1 = Character.getNumericValue(currentLine.charAt(0));
+					int task2 = Character.getNumericValue(currentLine.charAt(1));
+				//invalid task check
+					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1) )
+					{
+						System.out.println("Invalid machine/task");
+						break;
+					}
 				
+					
+				//change element to true
+					tooNear[task1-1][task2-1] = True;
+				}
 				
 			}
 			
