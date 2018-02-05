@@ -73,26 +73,30 @@ public class mainIO {
 					
 					//check if there is a machine or task outside the usable values
 					if (mach > 8) {
-						//thrown invalideMachine exception
-						break;
+						//thrown invalideMachine error
+						throw new Exception("Forced Partial Assignment Exception: invalid machine");
+						//break;
 					}
 					if (task > 8) {
-						//throw invalidTask exception
-						break;
+						//throw invalidTask error
+						throw new Exception("Forced Partial Assignment Exception: invalid task");
+						//break;
 					}
 					
 					//check for two task one machine error
 					if (forcedAssignArray[mach] != -1)
 					{
-						//throw twotaskonemachine exception
-						break;
+						//throw exception
+						throw new Exception("Forced Partial Assignment Exception: two tasks to one machine");
+						//break;
 					}
 					
 					//check for one task two machine error
 					if (oneTaskTwoMachine.contains(task))
 					{
-						//throw onetasktwomachine exception
-						break;
+						//throw exception
+						throw new Exception("Forced Partial Assignment Exception: two machines for one task");
+						//break;
 					}
 					
 					else 
