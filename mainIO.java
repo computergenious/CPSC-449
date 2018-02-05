@@ -216,6 +216,12 @@ public class mainIO {
 						//MACHINE PENALTY ERROR - MISSING ROW
 					}
 				}//Exits after reading 8 lines
+				//Checks if next line is empty or now
+				nextLine = fileScanner.nextLine();
+				if (nextLine != "\n") {
+					//Error - More than 8 rows
+				}
+				
 				flag++;
 			}//End of machine penalties
 			
