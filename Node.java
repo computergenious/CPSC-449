@@ -225,5 +225,52 @@ public class Node {
     public int getPenaltyPoints(){
         return penaltyPoints;
     }
+	
+    private String getTaskLetter(int element) {
+        String letter;
+        switch (element) {
+            case 0:
+                letter = "A";
+                break;
+            case 1:
+                letter = "B";
+                break;
+            case 2:
+                letter = "C";
+                break;
+            case 3:
+                letter = "D";
+                break;
+            case 4:
+                letter = "E";
+                break;
+            case 5:
+                letter = "F";
+                break;
+            case 6:
+                letter = "G";
+                break;
+            case 7:
+                letter = "H";
+                break;
+            default:
+                letter = "";
+                break;
+        }
+
+        return letter;
+    }
+
+    public String toString() {
+        String result = "Solution ";
+        for (int i : pairs) {
+            result = result.concat(getTaskLetter(i));
+            //result = result.concat(" ");
+        }
+        result = result + "; Quality: ";
+        result = result + getPenaltyPoints();
+
+        return result;
+    }
 }
  
