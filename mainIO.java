@@ -37,7 +37,7 @@ public class mainIO {
 			
 			
 			//name check
-			if (nextLine == "Name:"){
+			if (nextLine == "Name:" && flag == 0){
 				fileScanner.nextLine();
 				nextLine = fileScanner.nextLine();
 				flag++;
@@ -114,7 +114,7 @@ public class mainIO {
 			
 			
 			
-			if (nextLine == "forbidden machine:")
+			if (nextLine == "forbidden machine:" && flag == 2)
 			{
 				
 				//reads through the next (max) 8 lines for the data
@@ -139,12 +139,12 @@ public class mainIO {
 				
 					
 				//change element to true
-					forbidden[mach-1][task-1] = True;
+					forbidden[mach-1][task-1] = true;
 				}
-				
+				flag++;
 			}
 			
-			if (nextLine == "too-near tasks:")
+			if (nextLine == "too-near tasks:" && flag == 3)
 			{
 				//reads through the next (max) 8 lines for the data
 				for ( int i=0; i < 8; i++) 
@@ -168,9 +168,9 @@ public class mainIO {
 				
 					
 				//change element to true
-					tooNear[task1-1][task2-1] = True;
+					tooNear[task1-1][task2-1] = true;
 				}
-				
+				flag++
 			}
 			
 			
@@ -186,7 +186,7 @@ public class mainIO {
 			 * 6 - Checks if the value is greater than 0     (Natural number)
 			 * 
 			 */
-			if (nextLine == "machine penalties:") {
+			if (nextLine == "machine penalties:" && flag == 4) {
 				for (int i = 0; i < 8; i++) {							//Go though 8 rows
 					nextLine = fileScanner.nextLine();					//Read Line
 					if (nextLine != "\n") {								//If there is an empty row
@@ -223,5 +223,16 @@ public class mainIO {
 				
 		}//End of while loop for reading file
 		
+		
+		//Checks if the 6 sections have been ran
+		//1 - Name
+		//2 - forced partial assignment
+		//3 - forbidden task
+		//4 - too near
+		//5 - machine penalties
+		//6 - too near penalties
+		if (flag != 6) {
+			//Error while parsing input file
+		}
 	}
 }
