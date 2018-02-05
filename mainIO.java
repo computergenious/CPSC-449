@@ -15,11 +15,13 @@ public class mainIO {
 	
 	public static void main (String[] args) {
 	
+		Scanner fileScanner = null;
+		
 		try {
 		// initializes the main file reader and writer as well as the file scanner
 		BufferedReader fileInput = new BufferedReader(new FileReader(args[0]));
 		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
-		Scanner fileScanner = new Scanner(fileInput);
+		fileScanner = new Scanner(fileInput);
 		}
 		
 		catch (IOException e) {
@@ -27,7 +29,7 @@ public class mainIO {
 		}
 		
 		//initialized the force assignment array, penalty array, etc.
-		int[] forcedAssignArray;
+		int[] forcedAssignArray = new int[8];
 		int[][] penaltyArray = new int[8][8];
 		boolean[][] forbidden = new boolean[8][8];
 		boolean[][] tooNear = new boolean[8][8];
@@ -176,7 +178,7 @@ public class mainIO {
 				//change element to true
 					tooNear[task1-1][task2-1] = true;
 				}
-				flag++
+				flag++;
 			}
 			
 			
