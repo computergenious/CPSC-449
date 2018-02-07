@@ -137,8 +137,8 @@ public class mainIO {
 				//checks if there is no more data
 					if (nextLine == "\n") break;
 					
-				//replace everything except numbers to commas
-					String currentLine = nextLine.replaceAll("[^-?0-9]", ",");
+				//replace everything except numbers and A-H to commas
+					String currentLine = nextLine.replaceAll("[^-?0-9A-H]", ",");
 					currentLine = currentLine.replaceAll("(,)+", ",");
 					
 				//split string and grab machine and task as ints
@@ -169,7 +169,7 @@ public class mainIO {
 					if (nextLine == "\n") break;
 					
 				//replace everything except numbers to commas
-					String currentLine = nextLine.replaceAll("[^-?0-9]", ",");
+					String currentLine = nextLine.replaceAll("[^A-H]", ",");
 					currentLine = currentLine.replaceAll("(,)+", ",");
 					
 				//split string and grab machine and task as ints
