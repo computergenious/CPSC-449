@@ -140,7 +140,7 @@ public class mainIO {
 			{
 				
 				//reads through the next (max) 8 lines for the data
-				for ( int i=0; i < 8; i++) 
+				while (fileScanner.hasNext()) 
 				{
 					nextLine = fileScanner.nextLine();
 				//checks if there is no more data
@@ -170,7 +170,7 @@ public class mainIO {
 			if (nextLine == "too-near tasks:" && flag == 3)
 			{
 				//reads through the next (max) 8 lines for the data
-				for ( int i=0; i < 8; i++) 
+				while (fileScanner.hasNext())
 				{
 					nextLine = fileScanner.nextLine();
 				//checks if there is no more data
@@ -181,8 +181,8 @@ public class mainIO {
 					
 				//split string and grab machine and task as ints
 					String[] split = currentLine.split(",");
-					int task = Integer.valueOf(map.get(split[0]));
-					int task = Integer.valueOf(map.get(split[1]));
+					int task1 = Integer.valueOf(map.get(split[0]));
+					int task2 = Integer.valueOf(map.get(split[1]));
 				//invalid task check
 					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1) )
 					{
