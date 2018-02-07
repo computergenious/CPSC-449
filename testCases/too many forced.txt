@@ -15,7 +15,7 @@ forbidden machine:
 (2,D)
 (3,F)
 
-too-near tasks
+too-near tasks:
 (C,D)
 (A,C)
 
