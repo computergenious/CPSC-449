@@ -152,6 +152,11 @@ public class mainIO {
 				//split string and grab machine and task as ints
 					String[] split = currentLine.split(",");
 					int mach = Integer.valueOf(split[0]);
+					if (map.get(split[1] == null)
+					{
+						System.out.println("Invalid machine/task");
+						break;  
+					}
 					int task = Integer.valueOf(map.get(split[1]));
 				//invalid task check
 					if((mach > 8 || mach < 1) || (task > 8 || task < 1) )
@@ -181,6 +186,11 @@ public class mainIO {
 					
 				//split string and grab machine and task as ints
 					String[] split = currentLine.split(",");
+					if (map.get(split[1] == null || split[0] == null)
+					{
+						System.out.println("Invalid machine/task");
+						break;  
+					}
 					int task1 = Integer.valueOf(map.get(split[0]));
 					int task2 = Integer.valueOf(map.get(split[1]));
 				//invalid task check
