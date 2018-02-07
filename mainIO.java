@@ -125,7 +125,7 @@ public class mainIO {
 					{
 						//if no errors are thrown adds the value to the arrays
 						oneTaskTwoMachine.add(task);
-						forcedAssignArray[mach] = task;
+						forcedAssignArray[mach - 1] = task;
 					}
 				}
 				
