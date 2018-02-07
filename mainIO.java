@@ -147,13 +147,12 @@ public class mainIO {
 					if (nextLine == "\n") break;
 					
 				//replace everything except numbers and A-H to commas
-					String currentLine = nextLine.replaceAll("[^-?0-9A-H]", ",");
-					currentLine = currentLine.replaceAll("(,)+", ",");
+					String currentLine = nextLine.replaceAll("[()]", "");
 					
 				//split string and grab machine and task as ints
 					String[] split = currentLine.split(",");
-					int mach = Integer.valueOf(split[1]);
-					int task = Integer.valueOf(map.get(split[2]));
+					int mach = Integer.valueOf(split[0]);
+					int task = Integer.valueOf(map.get(split[1]));
 				//invalid task check
 					if((mach > 8 || mach < 1) || (task > 8 || task < 1) )
 					{
@@ -178,13 +177,12 @@ public class mainIO {
 					if (nextLine == "\n") break;
 					
 				//replace everything except numbers to commas
-					String currentLine = nextLine.replaceAll("[^A-H]", ",");
-					currentLine = currentLine.replaceAll("(,)+", ",");
+					String currentLine = nextLine.replaceAll("[()]", ",");
 					
 				//split string and grab machine and task as ints
 					String[] split = currentLine.split(",");
+					int task = Integer.valueOf(map.get(split[0]));
 					int task = Integer.valueOf(map.get(split[1]));
-					int task = Integer.valueOf(map.get(split[2]));
 				//invalid task check
 					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1) )
 					{
