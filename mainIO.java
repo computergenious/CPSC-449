@@ -252,29 +252,24 @@ public class mainIO {
 			
 			
 			if (nextLine == "too-near penalities" && flag == 5) {
-				for (int i = 0; i < 8; i ++) {			//Loop 8 times max
-					nextLine = fileScanner.nextLine();
-					if (nextLine == "\n") {			//If empty line, break
-						break;
-					}
-
-					String tempLine = nextLine.replaceAll("[^-?0-9]", ",");
-					tempLine = tempLine.replaceAll("(,)+",",");
+				nextLine = fileScanner.nextLine();
+				while (nextLine != "/n") {
+					String tempLine = nextLine.replaceAll("[()]", "");
 					String[] tempSplit = tempLine.split(",");
 
 
-					int task1 = Integer.valueOf(map.get(tempSplit[1]));
-					int task2 = Integer.valueOf(map.get(tempSplit[2]));
-					int penalty = Integer.valueOf(tempSplit[3]);
+					int task1 = Integer.valueOf(map.get(tempSplit[0]));
+					int task2 = Integer.valueOf(map.get(tempSplit[1]));
+					int penalty = Integer.valueOf(tempSplit[2]);
 
 
-					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1))
-					{
+					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1)){
 						System.out.println("Invalid machine/task");
 						break;
 					}
 					
-					tooNearPen[task1-1][task2-1] = penalty;				
+					tooNearPenalty[task1-1][task2-1] = penalty;	
+					nextLine = fileScanner.nextLine();
 				}
 				flag++;
 			}
