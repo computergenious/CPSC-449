@@ -146,7 +146,7 @@ public class mainIO {
 				//checks if there is no more data
 					if (nextLine == "\n") break;
 					
-				//replace everything except numbers and A-H to commas
+				//replace brackets
 					String currentLine = nextLine.replaceAll("[()]", "");
 					
 				//split string and grab machine and task as ints
@@ -176,7 +176,7 @@ public class mainIO {
 				//checks if there is no more data
 					if (nextLine == "\n") break;
 					
-				//replace everything except numbers to commas
+				//replace brackets
 					String currentLine = nextLine.replaceAll("[()]", ",");
 					
 				//split string and grab machine and task as ints
