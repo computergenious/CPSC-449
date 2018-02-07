@@ -22,10 +22,11 @@ public class mainIO {
 		Scanner fileScanner = new Scanner(fileInput);
 		
 		//initialized the force assignment array, penalty array, etc.
-		int[] forcedAssignArray;
-		int[][] penaltyArray = new int[8][8];
+		int[] forcedAssignArray = new int[8];
 		boolean[][] forbidden = new boolean[8][8];
 		boolean[][] tooNear = new boolean[8][8];
+		int[][] penaltyArray = new int[8][8];
+		int[][] tooNearPenalty = new int[8][8]
 		int flag = 0;
 		
 		//map A-H to 1-8
@@ -186,7 +187,7 @@ public class mainIO {
 				//change element to true
 					tooNear[task1-1][task2-1] = true;
 				}
-				flag++
+				flag++;
 			}
 			
 			
@@ -240,6 +241,37 @@ public class mainIO {
 				
 				flag++;
 			}//End of machine penalties
+			
+			
+			
+			if (nextLine == "too-near penalities" && flag == 5) {
+				for (int i = 0; i < 8; i ++) {			//Loop 8 times max
+					nextLine = fileScanner.nextLine();
+					if (nextLine == "\n") {			//If empty line, break
+						break;
+					}
+
+					String tempLine = nextLine.replaceAll("[^-?0-9]", ",");
+					tempLine = tempLine.replaceAll("(,)+",",");
+					String[] tempSplit = tempLine.split(",");
+
+
+					int task1 = Integer.valueOf(map.get(tempSplit[1]));
+					int task2 = Integer.valueOf(map.get(tempSplit[2]));
+					int penalty = Integer.valueOf(tempSplit[3]);
+
+
+					if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1))
+					{
+						System.out.println("Invalid machine/task");
+						break;
+					}
+					
+					tooNearPen[task1-1][task2-1] = penalty;				
+				}
+				flag++;
+			}
+			
 			
 			
 				
