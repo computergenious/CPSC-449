@@ -35,7 +35,7 @@ public class mainIO {
 		boolean[][] forbidden = new boolean[8][8];
 		boolean[][] tooNear = new boolean[8][8];
 		int[][] penaltyArray = new int[8][8];
-		int[][] tooNearPenalty = new int[8][8]
+		int[][] tooNearPenalty = new int[8][8];
 		int flag = 0;
 		
 		//map A-H to 1-8
