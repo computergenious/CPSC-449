@@ -11,15 +11,24 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
+import
 
 public class mainIO {
 	
 	public static void main (String[] args) {
 	
+		Scanner fileScanner = null;
+		String outputString = "";
+	
+		try {
 		// initializes the main file reader and writer as well as the file scanner
 		BufferedReader fileInput = new BufferedReader(new FileReader(args[0]));
-		BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
-		Scanner fileScanner = new Scanner(fileInput);
+		fileScanner = new Scanner(fileInput);
+		}
+		
+		catch (IOException e) {
+			System.out.println("Input file not found");
+		}
 		
 		//initialized the force assignment array, penalty array, etc.
 		int[] forcedAssignArray = new int[8];
@@ -288,5 +297,9 @@ public class mainIO {
 		if (flag != 6) {
 			//Error while parsing input file
 		}
+	//output IO
+	BufferedWriter fileOutput = new BufferedWriter(new FileWriter(args[1]));
+	fileOutput.write(outputString);
 	}
+	
 }
