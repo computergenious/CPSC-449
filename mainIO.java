@@ -64,7 +64,7 @@ public class mainIO {
 
 
 				//name check
-				if (nextLine == "Name:" && flag == 0){
+				if (nextLine.equals("Name:") && flag == 0){
 					fileScanner.nextLine();
 					nextLine = fileScanner.nextLine();
 					flag++;
@@ -157,7 +157,7 @@ public class mainIO {
 					//split string and grab machine and task as ints
 						String[] split = currentLine.split(",");
 						int mach = Integer.valueOf(split[0]);
-						if (map.get(split[1] == null)
+						if (map.get(split[1]) == null)
 						{
 							System.out.println("Invalid machine/task");
 							break;  
@@ -191,7 +191,7 @@ public class mainIO {
 
 					//split string and grab machine and task as ints
 						String[] split = currentLine.split(",");
-						if (map.get(split[1] == null || split[0] == null)
+						if (map.get(split[1]) == null || map.get(split[0]) == null)
 						{
 							System.out.println("Invalid machine/task");
 							break;  
@@ -242,23 +242,28 @@ public class mainIO {
 											penaltyArray[i][q] = val;
 										} else {
 											//PENALTY ERROR - LESS THAN ZERO
+											throw new Exception("Machine Penalty Error - Value is less than zero");
 										}
 									} catch (NumberFormatException e) {
 										//PENALTY ERROR - NOT AN INTEGER
+										throw new Exception("Machine Penalty Error - Value is not an Integer");
 									}
 								}
 
 							} else {
 								//MACHINE PENALTY ERROR - DOESN'T HAVE 8 VALUES
+								throw new Exception("Machine Penalty Error - Column does not have exactly 8 values");
 							}
 						} else {
 							//MACHINE PENALTY ERROR - MISSING ROW
+							throw new Exception("Machine Penalty Error - Less than 8 Rows");
 						}
 					}//Exits after reading 8 lines
 					//Checks if next line is empty or now
 					nextLine = fileScanner.nextLine();
 					if (nextLine != "\n") {
 						//Error - More than 8 rows
+						throw new Exception("Machine Penalty Error - More than 8 rows");
 					}
 
 					flag++;
@@ -308,7 +313,7 @@ public class mainIO {
 				throw new Exception("Error while parsing");
 			}
 						    
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.print(e.getMessage());
 		}
 						    
