@@ -34,3 +34,4 @@ too-near penalities:
 (7,4,2)
 (5,8,1)
 (7,2,1)
+
