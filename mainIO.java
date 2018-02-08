@@ -277,11 +277,17 @@ public class mainIO {
 						String tempLine = nextLine.replaceAll("[()]", "");
 						String[] tempSplit = tempLine.split(",");
 
+						if (map.get(tempSplit[0]) == null || map.get(tempSplit[1]) == null){
+							throw new Exception("too-near penalties Error - task value error");
+						}
 
 						int task1 = Integer.valueOf(map.get(tempSplit[0]));
 						int task2 = Integer.valueOf(map.get(tempSplit[1]));
 						int penalty = Integer.valueOf(tempSplit[2]);
 
+						if (penalty < 0) {
+							throw new Exception("too-near penalties Error - Penalty less than zero");
+						}
 
 						if((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1)){
 							System.out.println("Invalid machine/task");
