@@ -26,14 +26,14 @@ public class Node {
             if(pairs[i] == DUMMY_VALUE){
                 pairs[i] = task;
             } else {
-                throw new Exception("partial assignment error: task already assigned at location");
+                throw new Exception("partial assignment error");
             }
 
             //Checking forbidden
-            if(forbidden[i][task]){
-                throw new Exception("invalid: forbidden task");
+            if(forbidden[i][task-1]){
+                throw new Exception("forbidden machine");
             }
-            
+
             //Checking too near task
             /*int prev;
             if (i == 0) {
@@ -54,16 +54,16 @@ public class Node {
             //Check to previous index
             if(pairs[prev] != DUMMY_VALUE) { //or pairs[prev] >= 0 && pairs[prev] < 8
                 int prevTask = pairs[prev];
-                if(tooNearTask[prevTask][task]){
-                    throw new Exception("invalid: too near prev");
+                if(tooNearTask[prevTask-1][task-1]){
+                    throw new Exception("too near task prev");
                 }
             }
 
             //Check to next index
             if(pairs[next]!= DUMMY_VALUE){
                 int nextTask = pairs[next];
-                if(tooNearTask[task][nextTask]){
-                    throw new Exception("invalid: too near next");
+                if(tooNearTask[task-1][nextTask-1]){
+                    throw new Exception("too near task next");
                 }
             }
         }
@@ -186,9 +186,39 @@ public class Node {
     }
 
     //placeholder
-    public int penalty() {
-        return 1;
+    private int penalty(){
+        int taskValue;
+        int machineValue;
+
+        /*
+         *
+         * PARSE THROUGH THE FINAL SOLUTION ARRAY
+         * AND GRAB THE INDEX AS WELL AS THE ELEMENT THEN PUT THEM BOTH INTO THE
+         * machineValue and taskValue VARIABLES RESPECTIVELY
+         *
+         */
+
+        for(int i = 0; i < pairs.length; i++) {
+            taskValue = pairs[i];
+            machineValue = i;
+            System.out.println("Result is: " + taskValue + "," +  machineValue);
+
+            /*
+             * TAKE THE taskValue AND machineValue VARIABLES AND USE THEM AS CO-ORDINATES TO LOCATE
+             * THE PENALTY VALUE WITHIN THE Penalties 2D ARRAY.
+             *
+             */
+
+            penaltyPoints += mainIO.penaltyArray[machineValue][taskValue];
+
+            int prevIndex = prevMachIndex(i);
+            penaltyPoints += mainIO.tooNearPenalty[pairs[prevIndex]][pairs[i]];
+        }
+        System.out.println("Total Penalty value is: " + penaltyPoints);
+
+        return penaltyPoints;
     }
+
 
     public static int prevMachIndex(int index) {
         int machIndex;
@@ -222,35 +252,35 @@ public class Node {
         }
     }
 
-    public int getPenaltyPoints(){
+    public int getPenaltyPoints() {
         return penaltyPoints;
     }
-	
+
     private String getTaskLetter(int element) {
         String letter;
         switch (element) {
-            case 0:
+            case 1:
                 letter = "A";
                 break;
-            case 1:
+            case 2:
                 letter = "B";
                 break;
-            case 2:
+            case 3:
                 letter = "C";
                 break;
-            case 3:
+            case 4:
                 letter = "D";
                 break;
-            case 4:
+            case 5:
                 letter = "E";
                 break;
-            case 5:
+            case 6:
                 letter = "F";
                 break;
-            case 6:
+            case 7:
                 letter = "G";
                 break;
-            case 7:
+            case 8:
                 letter = "H";
                 break;
             default:
@@ -272,5 +302,5 @@ public class Node {
 
         return result;
     }
+
 }
- 
