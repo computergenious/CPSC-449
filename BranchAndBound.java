@@ -13,15 +13,16 @@ public class BranchAndBound {
 
             // loop through remaining unassigned task and create a branch for each with machine above
             for(int task : node.getRemainingTasks()) {
+                //System.out.println(task);
 
                 // Check too near tasks hard constraints for the tasks
-                 int prevMach = Node.prevMachIndex(machine);
-                 boolean tooNearPrevFlag = (node.getTaskAtIndex(prevMach) != Node.DUMMY_VALUE) && tooNear[node.getTaskAtIndex(prevMach)][task];
+                int prevMach = Node.prevMachIndex(machine);
+                boolean tooNearPrevFlag = (node.getTaskAtIndex(prevMach) != Node.DUMMY_VALUE) && tooNear[node.getTaskAtIndex(prevMach)][task];
 
-                 int nextMach = Node.nextMachIndex(machine);
-                 boolean tooNearNextFlag = (node.getTaskAtIndex(nextMach) != Node.DUMMY_VALUE) && tooNear[task][node.getTaskAtIndex(nextMach)];
+                int nextMach = Node.nextMachIndex(machine);
+                boolean tooNearNextFlag = (node.getTaskAtIndex(nextMach) != Node.DUMMY_VALUE) && tooNear[task][node.getTaskAtIndex(nextMach)];
 
-                 boolean tooNearFlag = tooNearNextFlag || tooNearPrevFlag;
+                boolean tooNearFlag = tooNearNextFlag || tooNearPrevFlag;
 
                  // if too near tasks and forbidden machines constraints met create child node
                 if(!tooNearFlag && !forbidden[machine][task]) {
@@ -39,22 +40,8 @@ public class BranchAndBound {
                         // if subtree node has a better penalty then the current best node
                         // assign the best node to be the subtree node
 
-                        //NOTE: different versions shown on how to achieve this
-                        /*int nextNodePenalty;
-                        if(nextNode == null) { // try moving into next if-statement to create nested
-                            nextNodePenalty = Integer.MAX_VALUE;
-                        } else {
-                            nextNodePenalty = nextNode.penalty();
-                        }
-                        if(best == null || nextNodePenalty < best.penalty()) {
-                            best = nextNode;
-                        }*/
 
-                        /*if(best == null || nextNode.penalty() < best.penalty()) {
-                            best = nextNode;
-                        }*/
-
-                        if(best == null || nextNode.getPenaltyPoints() < best.getPenaltyPoints()) {
+                        if(best == null || (nextNode.getPenaltyPoints() < best.getPenaltyPoints())) {
                             best = nextNode;
                         }
 
