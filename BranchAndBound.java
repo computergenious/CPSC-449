@@ -1,9 +1,10 @@
 package assignment;
 
 public class BranchAndBound {
+    public static int counter =0;
 
     public static Node branchAndBound(Node node, Node best, boolean[][] forbidden, boolean[][] tooNear) {
-
+        counter++;
         if (node.getNumAvailableTasks() == 0) {
             // if all tasks are assigned then break out of recursion
             best = node;
@@ -14,7 +15,7 @@ public class BranchAndBound {
             // loop through remaining unassigned task and create a branch for each with machine above
             for(int task : node.getRemainingTasks()) {
                 //System.out.println(task);
-
+                
                 // Check too near tasks hard constraints for the tasks
                 int prevMach = Node.prevMachIndex(machine);
                 boolean tooNearPrevFlag = (node.getTaskAtIndex(prevMach) != Node.DUMMY_VALUE) && tooNear[node.getTaskAtIndex(prevMach)][task];
@@ -32,8 +33,7 @@ public class BranchAndBound {
                     // if best node not yet set(not all machines assigned a task
                     // of if subtree rooted at newly created node has a smaller
                     // penalty then the current best
-                    if(best == null || child.getPenaltyPoints() < best.getPenaltyPoints()){
-                    //if(best == null || child.penalty() < best.penalty()) {
+                    if(best == null || (child.getPenaltyPoints() < best.getPenaltyPoints())){
                         // create subtree of new node recursively
                         Node nextNode = branchAndBound(child, best, forbidden, tooNear);
 
