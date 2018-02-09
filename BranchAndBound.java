@@ -2,7 +2,7 @@ package assignment;
 
 public class BranchAndBound {
 
-    public Node branchAndBound(assignment.Node node, assignment.Node best, boolean[][] forbidden, boolean[][] tooNear) throws Exception {
+    public static Node branchAndBound(Node node, Node best, boolean[][] forbidden, boolean[][] tooNear) {
 
         if (node.getNumAvailableTasks() == 0) {
             // if all tasks are assigned then break out of recursion
@@ -16,10 +16,10 @@ public class BranchAndBound {
 
                 // Check too near tasks hard constraints for the tasks
                  int prevMach = Node.prevMachIndex(machine);
-                 boolean tooNearPrevFlag = node.getTaskAtIndex(prevMach) != Node.DUMMY_VALUE && tooNear[node.getTaskAtIndex(prevMach)][task];
+                 boolean tooNearPrevFlag = (node.getTaskAtIndex(prevMach) != Node.DUMMY_VALUE) && tooNear[node.getTaskAtIndex(prevMach)][task];
 
                  int nextMach = Node.nextMachIndex(machine);
-                 boolean tooNearNextFlag = node.getTaskAtIndex(nextMach) != Node.DUMMY_VALUE && tooNear[task][node.getTaskAtIndex(nextMach)];
+                 boolean tooNearNextFlag = (node.getTaskAtIndex(nextMach) != Node.DUMMY_VALUE) && tooNear[task][node.getTaskAtIndex(nextMach)];
 
                  boolean tooNearFlag = tooNearNextFlag || tooNearPrevFlag;
 
@@ -31,8 +31,7 @@ public class BranchAndBound {
                     // if best node not yet set(not all machines assigned a task
                     // of if subtree rooted at newly created node has a smaller
                     // penalty then the current best
-                    
-                    if(best == null || child.getPenaltyPoints() < best.getPenaltyPoints()) {
+                    if(best == null || child.getPenaltyPoints() < best.getPenaltyPoints()){
                     //if(best == null || child.penalty() < best.penalty()) {
                         // create subtree of new node recursively
                         Node nextNode = branchAndBound(child, best, forbidden, tooNear);
@@ -40,7 +39,7 @@ public class BranchAndBound {
                         // if subtree node has a better penalty then the current best node
                         // assign the best node to be the subtree node
 
-                        // created method in node class to do this and also keeps track of penalty points for nodes when they are created 
+                        //NOTE: different versions shown on how to achieve this
                         /*int nextNodePenalty;
                         if(nextNode == null) { // try moving into next if-statement to create nested
                             nextNodePenalty = Integer.MAX_VALUE;
@@ -55,7 +54,6 @@ public class BranchAndBound {
                             best = nextNode;
                         }*/
 
-                        // personally preferred version of if-statement
                         if(best == null || nextNode.getPenaltyPoints() < best.getPenaltyPoints()) {
                             best = nextNode;
                         }
@@ -65,5 +63,5 @@ public class BranchAndBound {
             }
         }
         return best;
-    } 
+    }
 }
