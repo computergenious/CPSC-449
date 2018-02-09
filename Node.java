@@ -44,7 +44,7 @@ public class Node {
             if(pairs[prev] != DUMMY_VALUE) { //or pairs[prev] >= 0 && pairs[prev] < 8
                 int prevTask = pairs[prev];
                 if(tooNearTask[prevTask][task]){
-                    throw new Exception("too near task prev");
+                    throw new Exception("invalid machine/task");
                 }
             }
 
@@ -52,7 +52,7 @@ public class Node {
             if(pairs[next]!= DUMMY_VALUE){
                 int nextTask = pairs[next];
                 if(tooNearTask[task][nextTask]){
-                    throw new Exception("too near task next");
+                    throw new Exception("invalid machine/task");
                 }
             }
         }
@@ -162,12 +162,12 @@ public class Node {
         int size = getNumAvailableTasks();
         int[] result = new int[size];
 
-        //int index = 0;
+        int index = 0;
         for(int i = 0; i < ARRAY_SIZE; i++) {
             if(!taskTaken[i]) {
-                result[--size] = i;
-        //        result[index] = i;
-          //      index++;
+        //        result[--size] = i;
+                result[index] = i;
+                index++;
             }
         }
 
@@ -178,21 +178,11 @@ public class Node {
     private int penalty(){
         int taskValue;
         int machineValue;
-
-	//	int array[ARRAY_SIZE];
-		// int temp;
-
-		// for (int i = 0; i < ARRAY_SIZE/2; i++)
-		// {
-		// 	temp = pairs[i];
-		// 	pairs[i] = pairs[ARRAY_SIZE-1 - i];
-		// 	pairs[ARRAY_SIZE-1 - i] = temp;
-		// }
 		
         for(int i = pairs.length-1; i > -1 ; i--) {
             taskValue = pairs[i];
             machineValue = i;
-            System.out.println("Result is: " + taskValue + "," +  machineValue);
+            System.out.println("Result is(M,T): " + machineValue + "," +  taskValue);
 			
             penaltyPoints += mainIO.penaltyArray[machineValue][taskValue];
             int nextIndex = nextMachIndex(i);
@@ -279,8 +269,15 @@ public class Node {
     public String toString() {
         String result = "Solution ";
         String taskLetter = "";
-        for (int i : pairs) {
-            result = result.concat(getTaskLetter(i));
+        String subscript = "";
+
+        //for (int i : pairs) {
+        for (int i = 0; i<pairs.length; i++) {
+            int element = pairs[i];
+            result = result.concat(getTaskLetter(element));
+            subscript = getUniCode(i);
+            result += subscript;
+
             //result = result.concat(" ");
      //       taskLetter = getTaskLetter(i) + taskLetter;
             
@@ -291,6 +288,39 @@ public class Node {
         result = result + getPenaltyPoints();
 
         return result;
+    }
+
+    public String getUniCode(int i) {
+        String uniCode = "";
+        switch(i) {
+            case 0:
+                uniCode = "\u2081";
+                break;
+            case 1:
+                uniCode = "\u2082";
+                break;
+            case 2:
+                uniCode = "\u2083";
+                break;
+            case 3:
+                uniCode = "\u2084";
+                break;
+            case 4:
+                uniCode = "\u2085";
+                break;
+            case 5:
+                uniCode = "\u2086";
+                break;
+            case 6:
+                uniCode = "\u2087";
+                break;
+            case 7:
+                uniCode = "\u2088";
+                break;
+            default:
+                break;
+        }
+        return uniCode;
     }
 
 }
