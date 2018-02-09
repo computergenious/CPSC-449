@@ -98,17 +98,24 @@ public class mainIO{
 
 
 						System.out.println("before if");
+                        // for(int i=0; i<8; i++) {
+                        //     System.out.println(forcedAssignArray[i]);
+                        // }
+                        // System.out.println("next line = "+nextLine);
+
+
 						//check for two task one machine error
-						if (forcedAssignArray[mach] != -1) {
+						if (forcedAssignArray[mach-1] != -1) {
+                            
 							//throw exception
 							throw new Exception("partial assignment error");
 							//break;
 						}
-
+                        System.out.println("after if");
 						
 						System.out.println("before array");
 						//check for one task two machine error
-						if (oneTaskTwoMachine.contains(task)) {
+						if (oneTaskTwoMachine.contains(task-1)) {
 							//throw exception
 							throw new Exception("partial assignment error");
 							//break;
@@ -324,8 +331,37 @@ public class mainIO{
                 throw new Exception("Error while parsing file");
             }
 
+            System.out.println();   
+
+            System.out.println("Forced Partial");
+            for (int i = 0; i<forcedAssignArray.length; i++) {
+                System.out.print(forcedAssignArray[i]+" ");
+            }
+            System.out.println();
+
+            System.out.println("Forbidden Array");
+            for (int i = 0; i < forbidden.length; i++) {
+                for (int j = 0; j < forbidden.length; j++)
+                {
+                    System.out.print(forbidden[i][j] + " ");
+                }
+                System.out.println();
+            }
+            System.out.println("Machine Penalties");
+            for (int i = 0; i < penaltyArray.length; i++) {
+                for (int j = 0; j < penaltyArray.length; j++)
+                {
+                    System.out.print(penaltyArray[i][j] + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+
+
+
             //Create nodes and start branch and bound search
             Node rootNode = new Node(forcedAssignArray, forbidden, tooNear);
+            System.out.println(rootNode.toString());
             Node solution;
             solution = BranchAndBound.branchAndBound(rootNode, null, forbidden, tooNear);
             if(solution != null) {
