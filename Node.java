@@ -35,20 +35,9 @@ public class Node {
             }
 
             //Checking too near task
-            /*int prev;
-            if (i == 0) {
-                prev = PREV_VALUE;
-            } else {
-                prev = i-1;
-            }*/
+
             int prev = prevMachIndex(i);
 
-            /*int next;
-            if (i == PREV_VALUE) {
-                next = 0;
-            } else {
-                next = i+1;
-            }*/
             int next = nextMachIndex(i);
 
             //Check to previous index
@@ -72,7 +61,7 @@ public class Node {
         for(int i : pairs){
             if(i != DUMMY_VALUE) { //i >=0 && i < ARRAY_SIZE
                 taskTaken[i] = true;
-            }
+            } 
         }
 
         // set penalty point for node
@@ -85,7 +74,7 @@ public class Node {
         this.pairs = node.getPairsArray();
         this.taskTaken = node.getTaskTakenArray();
         
-        // int task;
+        int task;
 
         // for(int i = 0; i < 8; i++) {
         //     task = node.getTaskAtIndex(i);
@@ -138,15 +127,15 @@ public class Node {
     public int getFirstAvailableMachine() {
         int machine = 0;
 
-        for(; machine < ARRAY_SIZE; machine++) {
-            if (pairs[machine] == DUMMY_VALUE) {
-                return machine;
-            }
-        }
+        // for(; machine < ARRAY_SIZE; machine++) {
+        //     if (pairs[machine] == DUMMY_VALUE) {
+        //         return machine;
+        //     }
+        // }
 
-        /*while (pairs[machine] != DUMMY_VALUE) {
+        while (pairs[machine] != DUMMY_VALUE) {
             machine++;
-        }*/
+        }
 
         return machine;
     }
@@ -177,8 +166,8 @@ public class Node {
         for(int i = 0; i < ARRAY_SIZE; i++) {
             if(!taskTaken[i]) {
                 result[--size] = i;
-                // result[index] = i;
-                // index++;
+        //        result[index] = i;
+          //      index++;
             }
         }
 
@@ -190,38 +179,24 @@ public class Node {
         int taskValue;
         int machineValue;
 
-        /*
-         *
-         * PARSE THROUGH THE FINAL SOLUTION ARRAY
-         * AND GRAB THE INDEX AS WELL AS THE ELEMENT THEN PUT THEM BOTH INTO THE
-         * machineValue and taskValue VARIABLES RESPECTIVELY
-         *
-         */
 	//	int array[ARRAY_SIZE];
-		int temp;
+		// int temp;
 
-		for (int i = 0; i < ARRAY_SIZE/2; i++)
-		{
-			temp = pairs[i];
-			pairs[i] = pairs[ARRAY_SIZE-1 - i];
-			pairs[ARRAY_SIZE-1 - i] = temp;
-		}
+		// for (int i = 0; i < ARRAY_SIZE/2; i++)
+		// {
+		// 	temp = pairs[i];
+		// 	pairs[i] = pairs[ARRAY_SIZE-1 - i];
+		// 	pairs[ARRAY_SIZE-1 - i] = temp;
+		// }
 		
         for(int i = pairs.length-1; i > -1 ; i--) {
             taskValue = pairs[i];
             machineValue = i;
             System.out.println("Result is: " + taskValue + "," +  machineValue);
-
-            /*
-             * TAKE THE taskValue AND machineValue VARIABLES AND USE THEM AS CO-ORDINATES TO LOCATE
-             * THE PENALTY VALUE WITHIN THE Penalties 2D ARRAY.
-             *
-             */
 			
             penaltyPoints += mainIO.penaltyArray[machineValue][taskValue];
-		//	System.out.println(penaltyPoints);
-           // int prevIndex = prevMachIndex(i);
-           // penaltyPoints += mainIO.tooNearPenalty[pairs[prevIndex]][pairs[i]];
+            int nextIndex = nextMachIndex(i);
+            penaltyPoints += mainIO.tooNearPenalty[pairs[i]][pairs[nextIndex]];
             
         }
         System.out.println("Total Penalty value is: " + penaltyPoints);
@@ -294,7 +269,7 @@ public class Node {
                 letter = "H";
                 break;
             default:
-                letter = "";
+                letter = "-1";
                 break;
         }
 
@@ -310,7 +285,7 @@ public class Node {
      //       taskLetter = getTaskLetter(i) + taskLetter;
             
         }
-      //  result = result + taskLetter;
+       // result = result + taskLetter;
     //    System.out.print(getTaskLetter(pairs[7]));
         result = result + "; Quality: ";
         result = result + getPenaltyPoints();
