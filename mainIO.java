@@ -136,7 +136,7 @@ public class mainIO{
 					nextLine = fileScanner.nextLine();
 					}
 					if (forcedCount > 8){
-						throw new Exception("too many forced");		//Prob change
+						throw new Exception("partial assignment error");		//Prob change
 					}
 
                     flag++;
@@ -185,16 +185,19 @@ public class mainIO{
                 System.out.println("Flag: " + flag);
                 System.out.println("nextLine is: " + nextLine);
                 
-				System.out.println("toonear BEGINNING");
+                System.out.println("toonear BEGINNING");
+                System.out.println("nextLine is: " + nextLine);
                 if (nextLine.equals("too-near tasks:") && flag == 3) {
 					System.out.println("tooNEAR Task");
                     //reads through the next (max) 8 lines for the data
                     nextLine = fileScanner.nextLine();
+                    
                     while (!nextLine.equals("")) {
                         
 
                         //replace brackets
-                        String currentLine = nextLine.replaceAll("[()]", ",");
+                        String currentLine = nextLine.replaceAll("[()]", "");
+                        System.out.println(currentLine);
 
                         //split string and grab machine and task as ints
                         String[] split = currentLine.split(",");
@@ -202,7 +205,7 @@ public class mainIO{
                         int task2 = Integer.valueOf(map.get(split[1]));
                         //invalid task check
                         if ((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1)) {
-                            throw new Exception("invalid too near task");
+                            throw new Exception("invalid task");
                         }
 
                         //change element to true
@@ -236,22 +239,20 @@ public class mainIO{
                     for (int i = 0; i < 8; i++) {                            //Go though 8 rows
                         nextLine = fileScanner.nextLine();                    //Read Line
                         if (!nextLine.equals("")) {                                //If there is an empty row
-
-                            String[] tempArray = nextLine.split(" ", 9);    //Splits first row into array
-
+                            System.out.println(nextLine);
+                            String[] tempArray = nextLine.split(" ");    //Splits first row into array
+                            System.out.println("TempArray is: " + tempArray.length);
                             if (tempArray.length == 8) {
 
                                 for (int q = 0; q < 8; q++) {                //Loop through each column
-                                    try {                                    //Try converting to Int
+                                                               //Try converting to Int
                                         int val = Integer.parseInt(tempArray[q]);
                                         if (val > -1) {                        //If value greater than 0
                                             penaltyArray[i][q] = val;
                                         } else {
                                             throw new Exception("invalid penalty");
                                         }
-                                    } catch (NumberFormatException e) {
-                                        writeToFile(e.getMessage(), args[1]);
-                                    }
+                                
                                 }
 
                             } else {
@@ -364,6 +365,7 @@ public class mainIO{
             System.out.println(rootNode.toString());
             Node solution;
             solution = BranchAndBound.branchAndBound(rootNode, null, forbidden, tooNear);
+            System.out.println("Counter: " + BranchAndBound.counter);
             if(solution != null) {
                 writeToFile(solution.toString(), args[1]);
             } else {
@@ -386,7 +388,9 @@ public class mainIO{
                 file.createNewFile();
             }
 
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(),false); //false to overwrite, true to append
+            PrintWriter fw = new PrintWriter(fileName,"UTF16"); //false to overwrite, true to append
+            
+
             BufferedWriter buffWriter = new BufferedWriter(fw);
             buffWriter.write(inputStringToFile);
             buffWriter.newLine();
