@@ -1,5 +1,3 @@
-package assignment;
-
 public class Node {
     private static final int ARRAY_SIZE = 8;
     private static final int PREV_VALUE = 7;
@@ -73,16 +71,6 @@ public class Node {
         //Copy arrays from parent node
         this.pairs = node.getPairsArray();
         this.taskTaken = node.getTaskTakenArray();
-        
-        int task;
-
-        // for(int i = 0; i < 8; i++) {
-        //     task = node.getTaskAtIndex(i);
-        //     pairs[i] = task;
-        //     if(task != -1) {
-        //         taskTaken[task] = true;
-        //     }
-        // }
 
         //Add new task to child node
         taskTaken[newTask] = true;
@@ -97,10 +85,6 @@ public class Node {
 
         System.arraycopy(pairs, 0, tempArray, 0, 8);
 
-        /*for (int index = 0; index < 8; index++) {
-            tempArray[index] = pairs[index];
-        }*/
-
 		return tempArray;
     }
     
@@ -108,10 +92,6 @@ public class Node {
 		boolean[] tempArray = new boolean[ARRAY_SIZE];
 
         System.arraycopy(taskTaken, 0, tempArray, 0, 8);
-
-        /*for (int index = 0; index < 8; index++) {
-            tempArray[index] = taskTaken[index];
-        }*/
 
 		return tempArray;
 	}
@@ -165,7 +145,6 @@ public class Node {
         int index = 0;
         for(int i = 0; i < ARRAY_SIZE; i++) {
             if(!taskTaken[i]) {
-        //        result[--size] = i;
                 result[index] = i;
                 index++;
             }
@@ -267,23 +246,18 @@ public class Node {
     }
 
     public String toString() {
-        String result = "Solution ";
+        String result = "Solution";
         String taskLetter = "";
         String subscript = "";
 
         //for (int i : pairs) {
         for (int i = 0; i<pairs.length; i++) {
+            result += " ";
             int element = pairs[i];
             result = result.concat(getTaskLetter(element));
             subscript = getUniCode(i);
             result += subscript;
-
-            //result = result.concat(" ");
-     //       taskLetter = getTaskLetter(i) + taskLetter;
-            
         }
-       // result = result + taskLetter;
-    //    System.out.print(getTaskLetter(pairs[7]));
         result = result + "; Quality: ";
         result = result + getPenaltyPoints();
 
