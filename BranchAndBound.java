@@ -1,10 +1,7 @@
-package assignment;
-
 public class BranchAndBound {
     public static int counter =0;
 
     public static Node branchAndBound(Node node, Node best, boolean[][] forbidden, boolean[][] tooNear) {
-        counter++;
         if (node.getNumAvailableTasks() == 0) {
             // if all tasks are assigned then break out of recursion
             best = node;
@@ -39,8 +36,6 @@ public class BranchAndBound {
 
                         // if subtree node has a better penalty then the current best node
                         // assign the best node to be the subtree node
-
-
                         if(best == null || (nextNode.getPenaltyPoints() < best.getPenaltyPoints())) {
                             best = nextNode;
                         }
