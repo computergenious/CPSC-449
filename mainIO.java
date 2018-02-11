@@ -234,16 +234,19 @@ public class mainIO{
                             String[] tempArray = nextLine.split(" ");    //Splits first row into array
                             System.out.println("TempArray is: " + tempArray.length);
                             if (tempArray.length == 8) {
-
+                                int val;
                                 for (int q = 0; q < 8; q++) {                //Loop through each column
                                                                //Try converting to Int
-                                        int val = Integer.parseInt(tempArray[q]);
-                                        if (val > -1) {                        //If value greater than 0
+                                    try{
+                                        val = Integer.parseInt(tempArray[q]);
+                                        if (val > -1) {
                                             penaltyArray[i][q] = val;
                                         } else {
                                             throw new Exception("invalid penalty");
                                         }
-                                
+                                    } catch (Exception e) {
+                                        throw new Exception("invalid penalty");
+                                    }
                                 }
 
                             } else {
