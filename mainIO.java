@@ -1,5 +1,3 @@
-package assignment;
-
 import java.io.*;
 import java.util.Scanner;
 import java.util.HashMap;
@@ -17,9 +15,6 @@ public class mainIO{
         int flag = 0;
 
         Scanner fileScanner = null;
-
-
-
 		
         try {
             // initializes the main file reader and writer as well as the file scanner
@@ -74,8 +69,6 @@ public class mainIO{
                     ArrayList<Integer> oneTaskTwoMachine = new ArrayList<Integer>();
                     //initialize the string for the current line
 					
-					
-					
                     nextLine = fileScanner.nextLine();
                     //reads through the next (max) 8 lines for the data
 				
@@ -84,8 +77,6 @@ public class mainIO{
 						String currentLine = nextLine.replaceAll("[()]", "");
 						String[] split = currentLine.split(",");
 
-
-						
 						//split string and grab machine and task as ints
 						int mach = Integer.valueOf(split[0]);
 						int task = Integer.valueOf(map.get(split[1]));
@@ -382,14 +373,8 @@ public class mainIO{
 
     private static void writeToFile(String inputStringToFile, String fileName) {
         try {
-            File file = new File(fileName);
 
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            PrintWriter fw = new PrintWriter(fileName,"UTF16"); //false to overwrite, true to append
-            
+            PrintWriter fw = new PrintWriter(fileName,"UTF16");
 
             BufferedWriter buffWriter = new BufferedWriter(fw);
             buffWriter.write(inputStringToFile);
