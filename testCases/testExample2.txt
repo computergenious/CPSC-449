@@ -1,0 +1,37 @@
+Name:
+testExample2
+
+forced partial assignment:
+(1,8)
+(3,6)
+(5,4)
+(7,2)
+
+forbidden machine:
+(2,7)
+(4,5)
+(6,3)
+(8,1)
+
+too-near tasks:
+(8,1)
+(2,3)
+(4,5)
+(6,7)
+
+machine penalties:
+0 0 0 0 0 0 0 1
+0 0 2 0 1 0 0 0
+0 0 0 0 0 1 0 0
+2 0 1 0 0 0 0 0
+0 0 0 1 0 0 0 0
+1 0 0 0 0 0 1 0
+0 1 0 0 0 0 0 0
+0 0 0 0 1 0 1 0
+
+too-near penalities:
+(5,2,2)
+(7,4,2)
+(5,8,1)
+(7,2,1)
+
