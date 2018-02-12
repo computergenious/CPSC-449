@@ -3,392 +3,331 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class mainIO{
-    public static int[][] penaltyArray = new int[8][8];
-    public static int[][] tooNearPenalty = new int[8][8];
-
+    public static int[][] machinePenalties = new int[8][8];
+    public static int[][] tooNearPenalties = new int[8][8];
+    
     public static void main(String[] args) {
-        int[] forcedAssignArray = new int[8];
-        boolean[][] forbidden = new boolean[8][8];
-        boolean[][] tooNear = new boolean[8][8];
-        int flag = 0;
+        	try{
+	        Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(args[0])));
+	
+            String line = trimSpaces(fileScanner.nextLine());
+            
+            if(!line.equals("Name:")){
+                throw new Exception("Error while parsing input file");
+            }
+            
+			String name = trimSpaces(fileScanner.nextLine()); 
+		    
+			line = skipBlankLines(fileScanner);
 
-        Scanner fileScanner = null;
-		
-        try {
-            // initializes the main file reader and writer as well as the file scanner
-            fileScanner = new Scanner(new BufferedReader(new FileReader(args[0])));
-        } catch (IOException e) {
-            System.out.println("Input file not found");
-        }
+			System.out.println(line);
 
-        //map A-H to 1-8
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("A", "1");
-        map.put("B", "2");
-        map.put("C", "3");
-        map.put("D", "4");
-        map.put("E", "5");
-        map.put("F", "6");
-        map.put("G", "7");
-        map.put("H", "8");
-		System.out.println("Hellosdsfd");
-        try {
+            
+            if(!line.equals("forced partial assignment:")){
+                throw new Exception("Error while parsing input file");
+            }
+			
+			int[] forcedAssignments = new int[8];
+			for(int i = 0; i < 8; i++){
+				forcedAssignments[i] = -1;
+			}
 
-            // while loop to move through the file and check
-            while (fileScanner.hasNext()) {
+			int machineForce;
+			int taskForce;
 
-                //assigns the next line to a string to be read and trims it
-                String nextLine = fileScanner.nextLine();
-                nextLine = nextLine.trim();
-
-                //name check
-                if (nextLine.equals("Name:") && flag == 0) {
-                    fileScanner.nextLine();
-                    nextLine = fileScanner.nextLine();
-                    
-                    flag++;
-                }
-                while(nextLine.equals("")){
-					nextLine = fileScanner.nextLine();
-                }
-                System.out.println("flag: "+ flag);
-                
-
-                //checks and initializes the forced partial assignment array
-                if (nextLine.equals("forced partial assignment:") && flag == 1) {
-					System.out.println("forced");
-					int forcedCount = 0;
-                    //initialize the
-                    for (int i = 0; i < 8; i++) {
-                        forcedAssignArray[i] = -1;
-                    }
-
-                    //initialized the array list for 1 task two machine error
-                    ArrayList<Integer> oneTaskTwoMachine = new ArrayList<Integer>();
-                    //initialize the string for the current line
-					
-                    nextLine = fileScanner.nextLine();
-                    //reads through the next (max) 8 lines for the data
+			for(String lineInList : getLines(fileScanner)){
+				String[] split = lineInList.substring(1, lineInList.length() - 1).split(",");
+				try {
+					machineForce = Integer.parseInt(split[0])-1;
+				} catch (Exception e){
+					throw new Exception("invalid machine/task");
+				}
+				taskForce = getTaskNumber(split[1]);
 				
-					while (!(nextLine.equals(""))) {
-						forcedCount++;
-						String currentLine = nextLine.replaceAll("[()]", "");
-						String[] split = currentLine.split(",");
-
-						//split string and grab machine and task as ints
-						int mach = Integer.valueOf(split[0]);
-						int task = Integer.valueOf(map.get(split[1]));
-						//invalid task check
-						
-						System.out.println("split");
-						if ((mach > 8 || mach < 1) || (task > 8 || task < 1)) {
-							throw new Exception("Invalid machine/task");
-						}
-
-
-						System.out.println("before if");
-                        // for(int i=0; i<8; i++) {
-                        //     System.out.println(forcedAssignArray[i]);
-                        // }
-                        // System.out.println("next line = "+nextLine);
-
-
-						//check for two task one machine error
-						if (forcedAssignArray[mach-1] != -1) {
-                            
-							//throw exception
-							throw new Exception("partial assignment error");
-							//break;
-						}
-                        System.out.println("after if");
-						
-						System.out.println("before array");
-						//check for one task two machine error
-						if (oneTaskTwoMachine.contains(task-1)) {
-							//throw exception
-							throw new Exception("partial assignment error");
-							//break;
-						} else {
-							//if no errors are thrown adds the value to the arrays
-							oneTaskTwoMachine.add(task-1);
-							forcedAssignArray[mach - 1] = task-1;
-							System.out.println("FORCED ASSIGN TEST: "+ forcedAssignArray[mach-1]);
-						}
-						
-						System.out.println("after array");
-						nextLine = fileScanner.nextLine();
-						
-					}
-					System.out.println("TESTING");
-					
-					while(nextLine.equals("")){
-					nextLine = fileScanner.nextLine();
-					}
-					if (forcedCount > 8){
-						throw new Exception("partial assignment error");		//Prob change
-					}
-
-                    flag++;
+				if(machineForce>7 || machineForce<0 || taskForce>7 || taskForce<0) {
+                    throw new Exception("invalid machine/task");
                 }
-
-	
-				System.out.println("Before forbiden");
-
-
-
-				System.out.println("Flag: " + flag);
-
-                if (nextLine.equals("forbidden machine:") && flag == 2) {
-					System.out.println("forbidden");
-
-                    //reads through the next (max) 8 lines for the data
-                    
-                    nextLine = fileScanner.nextLine();
-                    while (!nextLine.equals("")) {
-                        //replace brackets
-                        String currentLine = nextLine.replaceAll("[()]", "");
-
-                        //split string and grab machine and task as ints
-                        String[] split = currentLine.split(",");
-                        int mach = Integer.valueOf(split[0]);
-                        int task = Integer.valueOf(map.get(split[1]));
-                        //invalid task check
-                        if ((mach > 8 || mach < 1) || (task > 8 || task < 1)) {
-                            throw new Exception("Invalid machine/task");
-                        }
-
-                        //change element to true
-                        forbidden[mach - 1][task - 1] = true;
-                        nextLine = fileScanner.nextLine();
-           
-                    }
-                    System.out.println("Before flag");
-                    flag++;
-                    System.out.println("After flag increment");
+				if(forcedAssignments[machineForce] != -1) {
+                    throw new Exception("partial assignment error");
                 }
-                while(nextLine.equals("")){
-					nextLine = fileScanner.nextLine();
-				}
-                
-                
-                System.out.println("Flag: " + flag);
-                System.out.println("nextLine is: " + nextLine);
-                
-                System.out.println("toonear BEGINNING");
-                System.out.println("nextLine is: " + nextLine);
-                if (nextLine.equals("too-near tasks:") && flag == 3) {
-					System.out.println("tooNEAR Task");
-                    //reads through the next (max) 8 lines for the data
-                    nextLine = fileScanner.nextLine();
-                    
-                    while (!nextLine.equals("")) {
-                        
+			
+				forcedAssignments[machineForce] = taskForce;
+			}
 
-                        //replace brackets
-                        String currentLine = nextLine.replaceAll("[()]", "");
-                        System.out.println(currentLine);
+		    for (int m=0; m<8; m++){
+		    	if (forcedAssignments[m] != -1){
+			    	for (int n=0; n<8; n++){
+			    		if (n!=m && forcedAssignments[n] == forcedAssignments[m]){
+			    			throw new Exception("partial assignment error");
+			    		}
+			    	}
+		    	}
+			}
 
-                        //split string and grab machine and task as ints
-                        String[] split = currentLine.split(",");
-                        int task1 = Integer.valueOf(map.get(split[0]));
-                        int task2 = Integer.valueOf(map.get(split[1]));
-                        //invalid task check
-                        if ((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1)) {
-                            throw new Exception("invalid task");
-                        }
-
-                        //change element to true
-                        tooNear[task1 - 1][task2 - 1] = true;
-                        nextLine = fileScanner.nextLine();
-                    }
-                    flag++;
-                }
-                
-                while(nextLine.equals("")){
-					nextLine = fileScanner.nextLine();
-				}
-                
-                
-                System.out.println("Flag: " + flag);
-                System.out.println("nextLine is: " + nextLine);
-                
-
-                /*
-                 * Brief description of code:
-                 * 1 - if line is equal to "machine penalties"
-                 * 2 - Read through 8 lines, check if next Line is "\n"(Missing row)
-                 * 3 - Split the row into an array of strings
-                 * 4 - Checks if there are exactly 8 elements    (Not enough or too many values)
-                 * 5 - Attempt to convert each value to Integer  (Not a number)
-                 * 6 - Checks if the value is greater than 0     (Natural number)
-                 *
-                 */
-                if (nextLine.equals("machine penalties:") && flag == 4) {
-					System.out.println("Machine PEN");
-                    for (int i = 0; i < 8; i++) {                            //Go though 8 rows
-                        nextLine = fileScanner.nextLine();                    //Read Line
-                        if (!nextLine.equals("")) {                                //If there is an empty row
-                            System.out.println(nextLine);
-                            String[] tempArray = nextLine.split(" ");    //Splits first row into array
-                            System.out.println("TempArray is: " + tempArray.length);
-                            if (tempArray.length == 8) {
-                                int val;
-                                for (int q = 0; q < 8; q++) {                //Loop through each column
-                                                               //Try converting to Int
-                                    try{
-                                        val = Integer.parseInt(tempArray[q]);
-                                        if (val > -1) {
-                                            penaltyArray[i][q] = val;
-                                        } else {
-                                            throw new Exception("invalid penalty");
-                                        }
-                                    } catch (Exception e) {
-                                        throw new Exception("invalid penalty");
-                                    }
-                                }
-
-                            } else {
-                                throw new Exception("machine penalty error");
-                            }
-                        } else {
-                            throw new Exception("machine penalty error");
-                        }
-                    }//Exits after reading 8 lines
-                    //Checks if next line is empty or now
-                    nextLine = fileScanner.nextLine();
-                    if (!nextLine.equals("")) {
-                        throw new Exception("machine penalty error");
-                    }
-                    System.out.println(penaltyArray[1][1]);
-
-                    flag++;
-                }//End of machine penalties
-                
-                while(nextLine.equals("")){
-					nextLine = fileScanner.nextLine();
-				}
-                
-                
-                System.out.println("Flag: " + flag);
-                System.out.println("nextLine is: " + nextLine);
-
-
-
-				System.out.println("toonearPENALITES BEGINNING");
-                if (nextLine.equals("too-near penalities") && flag == 5) {
-					if (fileScanner.hasNext()){
-						System.out.println("TNP");
-						nextLine = fileScanner.nextLine();
-						System.out.println("nextLine is: " + nextLine);
-						while (!nextLine.equals("")){
-
-							String tempLine = nextLine.replaceAll("[()]", "");
-							String[] tempSplit = tempLine.split(",");
-
-							int task1 = Integer.valueOf(map.get(tempSplit[0]));
-							int task2 = Integer.valueOf(map.get(tempSplit[1]));
-							int penalty = Integer.valueOf(tempSplit[2]);
-
-							if ((task1 > 8 || task1 < 1) || (task2 > 8 || task2 < 1)) {
-								throw new Exception("Invalid task.");
-							}
-
-							tooNearPenalty[task1 - 1][task2 - 1] = penalty;
-							System.out.println("TOO NEAR PEN: "+tooNearPenalty[task1 - 1][task2 - 1]);
-							nextLine = fileScanner.nextLine();
-							System.out.println("AFTER CHECK");
-						}
-						
-					}
-					flag++;
-					System.out.println("Flag: " + flag);
-                }
-
-		//		while(nextLine.equals("")){
-		//				nextLine = fileScanner.nextLine();
-		//			}
-            }//End of while loop for reading file
-	
-	
-			System.out.println("FINISH");
-
-            //Checks if the 6 sections have been ran
-            //1 - Name
-            //2 - forced partial assignment
-            //3 - forbidden task
-            //4 - too near
-            //5 - machine penalties
-            //6 - too near penalties
-            if (flag != 6) {
-				System.out.println(flag);
-                throw new Exception("Error while parsing file");
+			System.out.println("FORCED PARTIAL ARRAY");
+            for (int i = 0; i<forcedAssignments.length; i++) {
+                System.out.print(Node.getTaskLetter(forcedAssignments[i]) + " ");
             }
+			System.out.println();
 
-            System.out.println();   
+			line = skipBlankLines(fileScanner);
+			
+			System.out.println(line);
 
-            System.out.println("Forced Partial");
-            for (int i = 0; i<forcedAssignArray.length; i++) {
-                System.out.print(forcedAssignArray[i]+" ");
+	        
+            if(!line.equals("forbidden machine:")){
+                throw new Exception("Error while parsing input file");
             }
-            System.out.println();
+            
+			boolean[][] forbiddenMachine = new boolean[8][8];
 
-            System.out.println("Forbidden Array");
-            for (int i = 0; i < forbidden.length; i++) {
-                for (int j = 0; j < forbidden.length; j++)
+			int machineForbid;
+			int taskForbid;
+
+			for(String lineInList : getLines(fileScanner)){
+				String[] split = lineInList.substring(1, lineInList.length() - 1).split(",");
+				try {
+					machineForbid = Integer.parseInt(split[0])-1 ;
+				} catch (Exception e)
+				{
+					throw new Exception("invalid machine/task");
+				}
+				taskForbid = getTaskNumber(split[1]);
+				
+				if(taskForbid<0 || taskForbid>7) {
+                    throw new Exception("invalid machine/task");
+                }
+
+				forbiddenMachine[machineForbid][taskForbid] = true;
+			}
+
+			System.out.println("FORBIDDEN ARRAY");
+            for (int k = 0; k < forbiddenMachine.length; k++) {
+                for (int j = 0; j < forbiddenMachine.length; j++)
                 {
-                    System.out.print(forbidden[i][j] + " ");
+                    System.out.print(forbiddenMachine[k][j] + " ");
                 }
                 System.out.println();
             }
-            System.out.println("Machine Penalties");
-            for (int i = 0; i < penaltyArray.length; i++) {
-                for (int j = 0; j < penaltyArray.length; j++)
-                {
-                    System.out.print(penaltyArray[i][j] + " ");
+	        
+			line = skipBlankLines(fileScanner);
+			
+			System.out.println(line);
+	        
+            if(!line.equals("too-near tasks:")){
+                throw new Exception("Error while parsing input file");
+            }
+
+			boolean[][] tooNear = new boolean [8][8];
+			int task1TooNear;
+			int task2TooNear;
+			for(String lineinList : getLines(fileScanner)){
+				String[] split = lineinList.substring(1, lineinList.length() - 1).split(",");
+				task1TooNear = getTaskNumber(split[0]);
+				task2TooNear = getTaskNumber(split[1]);
+				if(task2TooNear < 0 || task1TooNear < 0) {
+                    throw new Exception("invalid machine/task");
+                }
+				tooNear[task1TooNear][task2TooNear] = true;
+			}
+
+			System.out.println("TOO NEAR TASK ARRAY");
+            for (int k = 0; k < tooNear.length; k++) {
+                for (int j = 0; j < tooNear.length; j++) {
+                    System.out.print(tooNear[k][j] + " ");
                 }
                 System.out.println();
             }
-            System.out.println();
+	
+			line = skipBlankLines(fileScanner);
+			
+			System.out.println(line);
+	        
+            if(!line.equals("machine penalties:")){
+                throw new Exception("Error while parsing input file");
+            }
 
+            LinkedList<String> input = getLines(fileScanner);
+			if (input.size() != 8) throw new Exception("machine penalty error");
 
+			int i = 0;
+			for(String lineInList : input){
+				String[] split = lineInList.split(" ");
+				
+				if(split.length != 8) {
+                    throw new Exception("machine penalty error");
+                }
 
-            //Create nodes and start branch and bound search
-            Node rootNode = new Node(forcedAssignArray, forbidden, tooNear);
+				for(int j = 0; j < 8; j++){
+					try{
+						machinePenalties[i][j] = Integer.parseInt(split[j]);
+						if (machinePenalties[i][j] < 0){
+							throw new Exception("invalid penalty");
+						}
+					} catch (NumberFormatException e){
+						throw new Exception("invalid penalty");
+					}
+				}
+
+				i++;
+			}
+
+			System.out.println("MACHINE PENALTIES");
+            for (int k = 0; k < machinePenalties.length; k++) {
+                for (int j = 0; j < machinePenalties.length; j++) {
+                    System.out.print(machinePenalties[k][j] + " ");
+                }
+                System.out.println();
+            }
+	
+			line = skipBlankLines(fileScanner);
+			
+			System.out.println(line);
+	        
+			if(!line.equals("too-near penalties:"))	{
+				if (!line.equals("too-near penalities")) {
+					throw new Exception("Error while parsing input file");
+				}
+			}
+
+			int task1, task2, value;
+			for(String lineInList : getLines(fileScanner)){
+				String[] split = lineInList.substring(1, lineInList.length() - 1).split(",");
+				task1 = getTaskNumber(split[0]);
+				task2 = getTaskNumber(split[1]);
+				
+				if(task1 < 0 || task2 < 0) {
+                    throw new Exception("invalid task");
+                }
+				try{
+					value = Integer.parseInt(split[2]);
+				} catch (NumberFormatException e){
+					throw new Exception("invalid penalty");
+				}
+
+				tooNearPenalties[task1][task2] = value;
+			}
+
+			System.out.println("TOO NEAR PENALTIES");
+            for (int k = 0; k < tooNearPenalties.length; k++) {
+                for (int j = 0; j < tooNearPenalties.length; j++) {
+                    System.out.print(tooNearPenalties[k][j] + " ");
+                }
+                System.out.println();
+            }
+
+			
+			while(fileScanner.hasNext()){
+				if(!fileScanner.nextLine().trim().equals("")) {
+                    throw new Exception("Error while parsing input file");
+                }
+			}
+            
+            
+            Node rootNode = new Node(forcedAssignments, forbiddenMachine, tooNear);
             System.out.println(rootNode.toString());
+
             Node solution;
-            solution = BranchAndBound.branchAndBound(rootNode, null, forbidden, tooNear);
-            System.out.println("Counter: " + BranchAndBound.counter);
+            solution = BranchAndBound.branchAndBound(rootNode, null, forbiddenMachine, tooNear);
+
             if(solution != null) {
                 writeToFile(solution.toString(), args[1]);
             } else {
                 String noSolStr = "No valid solution possible!";
                 writeToFile(noSolStr, args[1]);
             }
-
-
+            
+            
         } catch (Exception e) {
             System.out.println(e.getMessage());
             writeToFile(e.getMessage(), args[1]);
         }
     }
 
+    private static String trimSpaces(String s){
+        if (s != null) {
+        	int i = s.length() - 1;
+            for(; i >= 0 && Character.isWhitespace(s.charAt(i)); i--);
+            return s.substring(0, i + 1);
+        } else {
+            return null;
+        }
+    }
+
+    public static int getTaskNumber(String task){
+        if(task.equals("A")) {
+            return 0;
+        } else if(task.equals("B")) {
+            return 1;
+        } else if(task.equals("C")) {
+            return 2;
+        } else if(task.equals("D")) {
+            return 3;
+        } else if(task.equals("E")) {
+            return 4;
+        } else if(task.equals("F")) {
+            return 5;
+        } else if(task.equals("G")) {
+            return 6;
+        } else if(task.equals("H")) {
+            return 7;
+        } else {
+            return -1;
+        }
+    }
+        
+    private static LinkedList<String> getLines(Scanner fileScanner){
+        LinkedList<String> lines = new LinkedList<String>();
+        String line;
+        if(fileScanner.hasNext()){
+        	line = trimSpaces(fileScanner.nextLine());
+        	while(!line.equals("")){
+        		lines.add(line);
+        		if(fileScanner.hasNext()){
+        			line = trimSpaces(fileScanner.nextLine());
+        		} else {
+        			line = "";
+        		}
+        	}
+        }
+        return lines;
+    }
+
+    private static String skipBlankLines(Scanner fileScanner) throws Exception{
+    	String line = null;
+    	if(fileScanner.hasNext()){
+    		line = fileScanner.nextLine();
+    		while(line.equals("") && fileScanner.hasNext()){
+    			line = fileScanner.nextLine();
+    		}
+        }
+        
+    	if(line != null && !line.equals("")){
+    		return line;
+    	} else {
+            throw new Exception("Error while parsing input file");
+        }	
+    }
+    
     private static void writeToFile(String inputStringToFile, String fileName) {
         try {
-
+            
             PrintWriter fw = new PrintWriter(fileName,"UTF16");
-
+            
             BufferedWriter buffWriter = new BufferedWriter(fw);
             buffWriter.write(inputStringToFile);
             buffWriter.newLine();
             buffWriter.close();
-
+            
             System.out.println(inputStringToFile);
             System.out.println("Done writing to file.");
-
+            
         } catch (IOException e) {
             System.out.println("Error writing to file");
         }
     }
 }
+
