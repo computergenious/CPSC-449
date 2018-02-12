@@ -107,14 +107,10 @@ public class Node {
     public int getFirstAvailableMachine() {
         int machine = 0;
 
-        // for(; machine < ARRAY_SIZE; machine++) {
-        //     if (pairs[machine] == DUMMY_VALUE) {
-        //         return machine;
-        //     }
-        // }
-
-        while (pairs[machine] != DUMMY_VALUE) {
-            machine++;
+        for(; machine < ARRAY_SIZE; machine++) {
+            if (pairs[machine] == DUMMY_VALUE) {
+                return machine;
+            }
         }
 
         return machine;
@@ -124,16 +120,10 @@ public class Node {
         int numTasks = 0;
 
          for(int value : pairs) {
-             if(value == -1) {
+             if(value == DUMMY_VALUE) {
                  numTasks++;
              }
          }
-
-        /*for(int i = 0; i < ARRAY_SIZE; i++){
-            if(pairs[i] == -1) {
-                numTasks++;
-            }
-        }*/
 
         return numTasks;
     }
@@ -153,7 +143,6 @@ public class Node {
         return result;
     }
 
-    //placeholder
     private int penalty(){
         int taskValue;
         int machineValue;
@@ -163,9 +152,9 @@ public class Node {
             machineValue = i;
             System.out.println("Result is(M,T): " + machineValue + "," +  taskValue);
 			
-            penaltyPoints += mainIO.penaltyArray[machineValue][taskValue];
+            penaltyPoints += mainIO.machinePenalties[machineValue][taskValue];
             int nextIndex = nextMachIndex(i);
-            penaltyPoints += mainIO.tooNearPenalty[pairs[i]][pairs[nextIndex]];
+            penaltyPoints += mainIO.tooNearPenalties[pairs[i]][pairs[nextIndex]];
             
         }
         System.out.println("Total Penalty value is: " + penaltyPoints);
@@ -210,44 +199,32 @@ public class Node {
         return penaltyPoints;
     }
 
-    private String getTaskLetter(int element) {
-        String letter;
-        switch (element) {
-            case 0:
-                letter = "A";
-                break;
-            case 1:
-                letter = "B";
-                break;
-            case 2:
-                letter = "C";
-                break;
-            case 3:
-                letter = "D";
-                break;
-            case 4:
-                letter = "E";
-                break;
-            case 5:
-                letter = "F";
-                break;
-            case 6:
-                letter = "G";
-                break;
-            case 7:
-                letter = "H";
-                break;
-            default:
-                letter = "-1";
-                break;
-        }
 
-        return letter;
+    public static String getTaskLetter(int t) {
+        switch(t){
+        case 0:
+            return "A";
+        case 1:
+            return "B";
+        case 2:
+            return "C";
+        case 3:
+            return "D";
+        case 4:
+            return "E";
+        case 5:
+            return "F";
+        case 6:
+            return "G";
+        case 7:
+            return "H";
+        default:
+            return "-1";
+        }
     }
 
     public String toString() {
         String result = "Solution";
-        String taskLetter = "";
         String subscript = "";
 
         //for (int i : pairs) {
