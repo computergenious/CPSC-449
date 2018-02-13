@@ -30,7 +30,9 @@ public class BranchAndBound {
                     // if best node not yet set(not all machines assigned a task
                     // of if subtree rooted at newly created node has a smaller
                     // penalty then the current best
-                    if(best == null || (child.getPenaltyPoints() < best.getPenaltyPoints())){
+                    
+                    //if(best == null || (child.getPenaltyPoints() < best.getPenaltyPoints())){
+                        
                         // create subtree of new node recursively
                         Node nextNode = branchAndBound(child, best, forbidden, tooNear);
 
@@ -40,7 +42,7 @@ public class BranchAndBound {
                             best = nextNode;
                         }
 
-                    }
+                    //}
                 }
             }
         }
