@@ -225,15 +225,15 @@ public class Node {
 
     public String toString() {
         String result = "Solution";
-        String subscript = "";
+        //String subscript = "";
 
         //for (int i : pairs) {
         for (int i = 0; i<pairs.length; i++) {
             result += " ";
             int element = pairs[i];
             result = result.concat(getTaskLetter(element));
-            subscript = getUniCode(i);
-            result += subscript;
+            //subscript = getUniCode(i);
+            //result += subscript;
         }
         result = result + "; Quality: ";
         result = result + getPenaltyPoints();
@@ -241,37 +241,37 @@ public class Node {
         return result;
     }
 
-    public String getUniCode(int i) {
-        String uniCode = "";
-        switch(i) {
-            case 0:
-                uniCode = "\u2081";
-                break;
-            case 1:
-                uniCode = "\u2082";
-                break;
-            case 2:
-                uniCode = "\u2083";
-                break;
-            case 3:
-                uniCode = "\u2084";
-                break;
-            case 4:
-                uniCode = "\u2085";
-                break;
-            case 5:
-                uniCode = "\u2086";
-                break;
-            case 6:
-                uniCode = "\u2087";
-                break;
-            case 7:
-                uniCode = "\u2088";
-                break;
-            default:
-                break;
-        }
-        return uniCode;
-    }
+//     public String getUniCode(int i) {
+//         String uniCode = "";
+//         switch(i) {
+//             case 0:
+//                 uniCode = "\u2081";
+//                 break;
+//             case 1:
+//                 uniCode = "\u2082";
+//                 break;
+//             case 2:
+//                 uniCode = "\u2083";
+//                 break;
+//             case 3:
+//                 uniCode = "\u2084";
+//                 break;
+//             case 4:
+//                 uniCode = "\u2085";
+//                 break;
+//             case 5:
+//                 uniCode = "\u2086";
+//                 break;
+//             case 6:
+//                 uniCode = "\u2087";
+//                 break;
+//             case 7:
+//                 uniCode = "\u2088";
+//                 break;
+//             default:
+//                 break;
+//         }
+//         return uniCode;
+//     }
 
 }
