@@ -51,16 +51,20 @@ name contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
 
 --DONE
 --Function for "forced partial assignment:"
---Incorrect values wil result in -1
+--Checks for invalid Values
 forced :: [[Char]] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 forced contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
-    | head contents /= "" = forced (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen ((convertNum (head contents !! 1)):forced1) ((convertLetter (head contents !! 3)):forced2)
+    | (head contents /= "") && (mach1 == (-1) || task1 == (-1)) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
+    | head contents /= "" = forced (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen (mach1:forced1) (task1:forced2)
     | otherwise = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                   --Stops onces "" is found
+    where mach1 = convertNum (head contents !! 1)
+          task1 = convertLetter (head contents !! 3)
 
 
 --DONE
 --Function for "forbidden machine:"
+--Checks for invalid Values
 forbiddenFunc :: [[Char]] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 forbiddenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
@@ -73,6 +77,7 @@ forbiddenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forc
 
 --DONE
 --Function for "too-near tasks:"
+--Checks for Invalid Values
 tooNearFunc :: [[Char]] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 tooNearFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
@@ -85,8 +90,8 @@ tooNearFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced
 
 --DONE
 --Function for "machine penalties:"
---Checks for length
 --Checks for valid values
+--     Does NOT check for rows, only column
 machinePenFunc :: [[Char]] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 machinePenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
@@ -100,7 +105,7 @@ machinePenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 for
 
 
 --Function for "too-near penalties:"
---(A,B,50)
+--Checks for Invalid Values
 tooNearPenFunc :: [[Char]] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 tooNearPenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
@@ -112,15 +117,18 @@ tooNearPenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 for
           penal = read (take ((length (head contents)) - 6) (drop 5 (head contents))) :: Int
 
 
+--Replace element in 2D array. Param: (row,col,value,List)
 --replaceVal #1 (replaceVal #2 True (List !! #1)) List
 replaceVal2D n m newVal x = replaceVal n (replaceVal m newVal (x !! n)) x
 
-
+--Replaces element in List
+--    Param: (index, value, List)
 replaceVal n newVal (x:xs)
     | n == 0 = newVal:xs
     | otherwise = x:replaceVal (n-1) newVal xs
 
 
+--Gets corresponding String based on flag
 status :: Int -> String
 status flag
     | flag == 0 = "Name Error"
