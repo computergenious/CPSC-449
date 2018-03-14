@@ -95,7 +95,7 @@ tooNearFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced
 machinePenFunc :: [[Char]] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 machinePenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
-    | (head contents /= "") && (colLength /= 4) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
+    | (head contents /= "") && (colLength /= 8) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | (head contents /= "") && ((all (>0) rowInt) == False) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | head contents /= "" = machinePenFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen   (rowInt:machinePen)   forced1 forced2 
     | otherwise = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                   --If there is no name, end
