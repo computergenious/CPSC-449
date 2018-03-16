@@ -148,12 +148,13 @@ replaceVal n newVal (x:xs)
 --Gets corresponding String based on flag
 status :: Int -> String
 status flag
-    | flag == 0 = "Name Error"
-    | flag == 1 = "forced partial assignment Error"
-    | flag == 2 = "forbidden machine Error"
-    | flag == 3 = "too-near tasks Error"
-    | flag == 4 = "machine penalties Error"
-    | flag == 5 = "too-near penalties Error"
+    | flag == 0 = "Error while parsing input file"
+    | flag == 1 = "partial assignment error"
+    | flag == 2 = "forbidden machine error"
+    | flag == 3 = "too-near tasks error"
+    | flag == 4 = "machine penalty error"
+    | flag == 5 = "too-near penalties error"
+    | flag == 10 = "invalid machine/task"
     | otherwise = ""
 
 
