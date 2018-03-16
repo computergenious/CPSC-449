@@ -62,6 +62,7 @@ forced :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int]
 forced contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("forced " ++ show flag) False = undefined
 forced contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
+    | length (head contents) /= 5 = isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | (head contents /= "") && (mach1 == (-1) || task1 == (-1)) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | head contents /= "" = forced (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen (mach1:forced1) (task1:forced2)
     | otherwise = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                   --Stops onces "" is found
@@ -76,6 +77,7 @@ forbiddenFunc :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -
 forbiddenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("forbiddenFunc " ++ show flag) False = undefined
 forbiddenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
+    | length (head contents) /= 5 = isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | (head contents /= "") && (mach1 == (-1) || task1 == (-1)) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | head contents /= "" = forbiddenFunc (Prelude.drop 1 contents) flag tooNear (replaceVal2D mach1 task1 True forbidden) tooNearPen machinePen forced1 forced2 
     | otherwise = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                   --If there is no name, end
@@ -90,6 +92,7 @@ tooNearFunc :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> 
 tooNearFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("tooNearFunc " ++ show flag) False = undefined
 tooNearFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
+    | length (head contents) /= 5 = isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | (head contents /= "") && (task1 == (-1) || task2 == (-1)) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | head contents /= "" = tooNearFunc (Prelude.drop 1 contents) flag (replaceVal2D task1 task2 True tooNear) forbidden tooNearPen machinePen forced1 forced2 
     | otherwise = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                   --If there is no name, end
@@ -120,6 +123,7 @@ tooNearPenFunc :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] 
 tooNearPenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("tooNearPenFunc " ++ show flag) False = undefined
 tooNearPenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | null contents = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
+    | length (head contents) < 6 = isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | (head contents /= "") && (task1 == (-1) || task2 == (-1) || penal == (-1)) = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | head contents /= "" = tooNearPenFunc (Prelude.drop 1 contents) flag tooNear forbidden  (replaceVal2D task1 task2 penal tooNearPen) machinePen forced1 forced2 
     | otherwise = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                   --If there is no name, end
