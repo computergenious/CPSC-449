@@ -40,7 +40,7 @@ theBeginning contents flag tooNear forbidden tooNearPen machinePen forced1 force
     | head contents == "forbidden machine:" && flag == 2         = forbiddenFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | head contents == "too-near tasks:" && flag == 3            = tooNearFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | head contents == "machine penalties:" && flag == 4         = machinePenFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen forced1 forced2 
-    | head contents == "too-near penalties" && flag == 5        = tooNearPenFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen forced1 forced2 
+    | head contents == "too-near penalities" && flag == 5        = tooNearPenFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | head contents == "" = isEmpty (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen forced1 forced2 
     | otherwise = isEmpty [] flag tooNear forbidden tooNearPen machinePen forced1 forced2                                   --If line is not one of labels or "", it is random and ends by return []
 
