@@ -5,6 +5,22 @@ module Parser (
 	Machine pen will error "Exception: Prelude.read: no parse" If penalty is not a num
 	
 	partial assignment error?? more than 8??
+	
+	FAILED TESTS:
+	    All tests below write "Error while parsing file" on the output file
+	    nochoice2.txt:                  actual = Solution A B C D E F G H; Quality: 8
+	    optzero.txt:                    actual = Solution A B C D E F G H; Quality: 0
+	    toonearpen1.txt:                actual = Solution A B C D E H F G; Quality: 16
+	    toonearpen2.txt:                actual = Solution A B C D E G F H; Quality: 18
+	    wrongmachinepenalty.txt:        actual = machine penalty error
+	    wrongmachinepenalty2.txt:       actual = machine penalty error
+		more than 8 rows
+	    wrongnumbermachine.txt:         actual = invalid penalty
+		error "main: Prelude.read: no parse"
+	    wrongnumbertoonear.txt:         actual = invalid penalty
+		error "main: Prelude.read: no parse" 
+	    wrongtooneartask.txt:           actual = invalid task
+	    wrongtask.txt:                  actual = invalid machine/task
 
 -}
 
