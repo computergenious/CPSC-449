@@ -49,7 +49,7 @@ solver (constraint, partials, error) = (Solution [] 0, error++"\n")
 -- check solution; if none possible after branch and bound pass message to writer otherwise pass solution
 checkSolution :: Solution -> (Solution, String)
 checkSolution solution 
-  | null (getAssignment solution) = (Solution [] 0, "No valid solution possible!\n")
+  | null (getAssignment solution) = (Solution [] 0, "No valid solution possible!\n\n")
   | otherwise = (solution, [])
 
 solve :: Constraint -> Solution -> [Int] -> [Int] -> Solution
@@ -120,7 +120,7 @@ root constraint [] assignments remaining = (assignments, remaining, [])
 -- assign forced partials and update lists of assignments and remaining 
 root constraint ((machine, task):pairs) assignments remaining
   | assignments !! machine == (-1) && valid = root constraint pairs (replace task machine assignments) (delete task remaining)
-  | otherwise = ([], [0..7], "No valid solution possible!\n")
+  | otherwise = ([], [0..7], "No valid solution possible!\n\n")
   where valid = allTrue (map (validAssignments constraint (replace task machine assignments)) [0..7])
 
 
