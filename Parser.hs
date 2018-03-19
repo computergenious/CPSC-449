@@ -4,26 +4,16 @@ module Parser (
 {-
 	Machine pen will error "Exception: Prelude.read: no parse" If penalty is not a num
 	
-	partial assignment error?? more than 8??
-	
-	FAILED TESTS:
-	    All tests below write "Error while parsing file" on the output file
-	    nochoice2.txt:                  actual = Solution A B C D E F G H; Quality: 8
-	    optzero.txt:                    actual = Solution A B C D E F G H; Quality: 0
-	    toonearpen1.txt:                actual = Solution A B C D E H F G; Quality: 16
-	    toonearpen2.txt:                actual = Solution A B C D E G F H; Quality: 18
-	    wrongmachinepenalty.txt:        actual = machine penalty error
-	    wrongmachinepenalty2.txt:       actual = machine penalty error
-		more than 8 rows
-	    wrongnumbermachine.txt:         actual = invalid penalty
-		error "main: Prelude.read: no parse"
-	    wrongnumbertoonear.txt:         actual = invalid penalty
-		error "main: Prelude.read: no parse" 
-	    wrongtooneartask.txt:           actual = invalid task
-	    wrongtask.txt:                  actual = invalid machine/task
-
+    partial assignment error?? more than 8??
+    
+    FAILED TESTS:
+    nochoice2.txt:              output = too-near penalties errors            actual = Solution A B C D E F G H; Quality: 8
+    optzero.txt:                output = invalid penalty                      actual = Solution A B C D E F G H; Quality: 0
+    toonearpen1.txt:            output = too-near penalties errors            actual = Solution A B C D E H F G; Quality: 16
+    toonearpen2.txt:            output = too-near penalties errors            actual = Solution A B C D E G F H; Quality: 18
+    wrongnumbermachine.txt:     error "main: Prelude.read: no parse"          actual = invalid penalty
+    wrongnumbertoonear.txt:     error "main: Prelude.read: no parse"          actual = invalid penalty
 -}
-
 
 import Debug.Trace
 import BranchBound
@@ -50,9 +40,8 @@ isEmpty :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int
 isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("isEmpty " ++ show flag) False = undefined
 isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | null contents && flag == 6 = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status flag)      --Stops and returns everything if contents is empty
-    | null contents = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status 0)                      --Stops and returns everything if contents is empty
+    | null contents = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status flag)                      --Stops and returns everything if contents is empty
     | otherwise = theBeginning contents flag tooNear forbidden tooNearPen machinePen forced1 forced2                        --If contents[] is not empty, send to theBeginning
-
 
 -- (Prelude.drop 1 contents) - removes the label and continues to function for work
 
@@ -90,10 +79,17 @@ forced contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | null (words (head contents))   = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                    --If the head contents is empty      -> return Normally
     | length (head contents) /= 5    = isEmpty [] 10 tooNear forbidden tooNearPen machinePen forced1 forced2                                --If task/mach are correct length(5) -> return invalid task/mach
     | mach1 == (-1) || task1 == (-1) = isEmpty [] 10 tooNear forbidden tooNearPen machinePen forced1 forced2                                --If either task or mach is invalid  -> return invalid task/mach
+    | partial /= [] && pairIsIn (mach1,task1) partial = isEmpty [] 13 tooNear forbidden tooNearPen machinePen forced1 forced2
     | otherwise = forced (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen (mach1:forced1) (task1:forced2)             --Nothing wrong                      -> calls itself and updates forced
     where mach1 = convertNum (head contents !! 1)
           task1 = convertLetter (head contents !! 3)
+          partial = zip forced1 forced2
 
+pairIsIn (a,b) [] = False
+pairIsIn (a,b) ((a',b'):xs) 
+    | a == a' || b == b' = True
+    | null xs = False
+    | otherwise = pairIsIn (a,b) xs
 
 --DONE
 --Function for "forbidden machine:"
@@ -141,8 +137,6 @@ machinePenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 for
     where rowInt = map (read::String->Int) (words (head contents))
           colLength = length rowInt
 
-
-
 --Function for "too-near penalties:"
 --Checks for Invalid Values
 tooNearPenFunc :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
@@ -184,6 +178,7 @@ status flag
     | flag == 10 = "invalid machine/task"
     | flag == 11 = "invalid penalty"
     | flag == 12 = "invalid task"
+    | flag == 13 = "partial assignment error"
     | otherwise = ""
 
 
