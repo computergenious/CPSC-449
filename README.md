@@ -1,7 +1,7 @@
 # CPSC-449
 
-to compile:
+to compile in command line:
   ghc main.hs
 
-to run:
-  ./main tests/fileInputName fileOutputName
+to run in command line:
+  path/main path/fileInputName path/fileOutputName
