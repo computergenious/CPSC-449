@@ -35,9 +35,9 @@ getPenalty (Solution _ penalty) = penalty
 
 solver :: (Constraint, [(Int, Int)], String) -> (Solution, String)
 
-{-
+
 solver (constraint, partials, []) | trace ("Constraints: " ++ show constraint) False = undefined
--}
+
 
 -- setup root and begin branch and bound 
 solver (constraint, partials, []) = checkSolution (solve constraint (Solution [] 99999999) assignments remaining)
@@ -54,9 +54,9 @@ checkSolution solution
 
 solve :: Constraint -> Solution -> [Int] -> [Int] -> Solution
 
-{- 
+ 
 solve constraint best assignments remaining | trace ("Best: " ++ show best ++ "; " ++ show assignments) False = undefined
--}
+
 
 -- checks if tasks remain and return solution if not create branch or start branching 
 solve constraint best assignments remaining
@@ -82,9 +82,9 @@ remove [x] index = [x]
 remove (x:xs) index = x : remove xs (index - 1)
 
 branch :: Constraint -> Solution -> [Int] -> [(Int, [Int])] -> Solution
-{-
+
 branch constraint best assignments [(task, nextRemaining)] | trace ("Best: " ++ show best ++ " Assignments: " ++ show assignments ++ " Task: " ++ show task ++ " Next Remain: " ++ show nextRemaining) False = undefined
--}
+
 
 -- create branch for task and applies task to first empty machine 
 branch constraint best assignments [(task, nextRemaining)] = solve constraint best (assign assignments task) nextRemaining
@@ -110,9 +110,9 @@ root :: Constraint -> [(Int, Int)] -> [Int] -> [Int] -> ([Int],[Int],String)
 -- set dummy values in list 
 root constraint partials [] [] = root constraint partials (dummy 8 (-1)) [0..7]
 
-{-
-root constraint ((machine, task):pairs) assignments remaining | trace ("Partials: " ++ show machine ++ "," ++ show task ++ " Remaining: " ++ show remaining ++ " Assignments: " ++ show assignments) False = undefined
--}
+
+root constraint ((machine, task):pairs) assignments remaining | trace ("Partials: " ++ show machine ++ "," ++ show task ++ show pairs ++ " Remaining: " ++ show remaining ++ " Assignments: " ++ show assignments) False = undefined
+
 
 -- if no forced partials
 root constraint [] assignments remaining = (assignments, remaining, [])
@@ -122,6 +122,7 @@ root constraint ((machine, task):pairs) assignments remaining
   | assignments !! machine == (-1) && valid = root constraint pairs (replace task machine assignments) (delete task remaining)
   | otherwise = ([], [0..7], "No valid solution possible!\n")
   where valid = allTrue (map (validAssignments constraint (replace task machine assignments)) [0..7])
+
 
 -- create list of dummy values 
 dummy :: Int -> Int -> [Int]
