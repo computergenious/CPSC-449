@@ -86,7 +86,7 @@ forced contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | otherwise = forced (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen (mach1:forced1) (task1:forced2)             --Nothing wrong                      -> calls itself and updates forced
     where mach1 = convertNum (head contents !! 1)
           task1 = convertLetter (head contents !! 3)
-	  partial == zip forced1 forced2
+          partial = zip forced1 forced2
 
 pairIsIn (a,b) [] = False
 pairIsIn (a,b) ((a',b'):xs) 
