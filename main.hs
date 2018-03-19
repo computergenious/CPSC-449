@@ -15,7 +15,7 @@ main = do
 printer :: (Solution,String)->IO()
 printer (solution, []) = do
     args<-getArgs
-    writeFile (args !! 1) ("Solution " ++ unwords(map (\c -> [taskLetter c]) (getAssignment solution))++"; Quality: " ++ show (getPenalty solution) ++ "\n\n")
+    writeFile (args !! 1) ("Solution " ++ unwords(map (\c -> [taskLetter c]) (getAssignment solution))++"; Quality: " ++ show (getPenalty solution) ++ "\n")
 
 
 printer (solution, error) = do
