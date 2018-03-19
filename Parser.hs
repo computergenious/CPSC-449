@@ -41,6 +41,7 @@ parsing contents = isEmpty contents flag  tooNear forbidden tooNearPen machinePe
 isEmpty :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("isEmpty " ++ show flag) False = undefined
 isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
+    | null contents && flag == 6 = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status flag)      --Stops and returns everything if contents is empty
     | null contents = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status 0)                      --Stops and returns everything if contents is empty
     | otherwise = theBeginning contents flag tooNear forbidden tooNearPen machinePen forced1 forced2                        --If contents[] is not empty, send to theBeginning
 
