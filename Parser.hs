@@ -2,18 +2,15 @@ module Parser (
     parsing
 ) where
 {-
-	Machine pen will error "Exception: Prelude.read: no parse" If penalty is not a num
-	
+    Machine pen will error "Exception: Prelude.read: no parse" If penalty is not a num
+    
     partial assignment error?? more than 8??
     
     FAILED TESTS:
-    nochoice2.txt:              output = too-near penalties errors            actual = Solution A B C D E F G H; Quality: 8
-    optzero.txt:                output = invalid penalty                      actual = Solution A B C D E F G H; Quality: 0
-    toonearpen1.txt:            output = too-near penalties errors            actual = Solution A B C D E H F G; Quality: 16
-    toonearpen2.txt:            output = too-near penalties errors            actual = Solution A B C D E G F H; Quality: 18
     wrongnumbermachine.txt:     error "main: Prelude.read: no parse"          actual = invalid penalty
     wrongnumbertoonear.txt:     error "main: Prelude.read: no parse"          actual = invalid penalty
 -}
+
 
 import Debug.Trace
 import BranchBound
@@ -39,9 +36,9 @@ parsing contents = isEmpty contents flag  tooNear forbidden tooNearPen machinePe
 isEmpty :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("isEmpty " ++ show flag) False = undefined
 isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
-    | null contents && flag == 6 = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status flag)      --Stops and returns everything if contents is empty
     | null contents = (Constraint tooNear  forbidden  tooNearPen  (Prelude.reverse machinePen), Prelude.reverse (Prelude.zip forced1 forced2), status flag)                      --Stops and returns everything if contents is empty
     | otherwise = theBeginning contents flag tooNear forbidden tooNearPen machinePen forced1 forced2                        --If contents[] is not empty, send to theBeginning
+
 
 -- (Prelude.drop 1 contents) - removes the label and continues to function for work
 
@@ -79,7 +76,7 @@ forced contents flag tooNear forbidden tooNearPen machinePen forced1 forced2
     | null (words (head contents))   = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                    --If the head contents is empty      -> return Normally
     | length (head contents) /= 5    = isEmpty [] 10 tooNear forbidden tooNearPen machinePen forced1 forced2                                --If task/mach are correct length(5) -> return invalid task/mach
     | mach1 == (-1) || task1 == (-1) = isEmpty [] 10 tooNear forbidden tooNearPen machinePen forced1 forced2                                --If either task or mach is invalid  -> return invalid task/mach
-    | partial /= [] && pairIsIn (mach1,task1) partial = isEmpty [] 13 tooNear forbidden tooNearPen machinePen forced1 forced2
+    | partial /= [] && pairIsIn (mach1,task1) partial = isEmpty [] 1 tooNear forbidden tooNearPen machinePen forced1 forced2
     | otherwise = forced (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen machinePen (mach1:forced1) (task1:forced2)             --Nothing wrong                      -> calls itself and updates forced
     where mach1 = convertNum (head contents !! 1)
           task1 = convertLetter (head contents !! 3)
@@ -132,17 +129,19 @@ machinePenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 for
     | null (head contents) && (length machinePen) /= 8  = isEmpty [] 4 tooNear forbidden tooNearPen machinePen forced1 forced2                                --Check for Row?
     | null (words (head contents))   = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                --Check for Row?
     | colLength /= 8                 = isEmpty [] 4 tooNear forbidden tooNearPen machinePen forced1 forced2
-    | (all (>0) rowInt) == False     = isEmpty [] 11 tooNear forbidden tooNearPen machinePen forced1 forced2                                             --If any value is under 0 -> return machinePen error
+    | (all (>(-1)) rowInt) == False     = isEmpty [] 11 tooNear forbidden tooNearPen machinePen forced1 forced2                                             --If any value is under 0 -> return machinePen error
     | otherwise                      = machinePenFunc (Prelude.drop 1 contents) flag tooNear forbidden tooNearPen  (rowInt:machinePen)  forced1 forced2
     where rowInt = map (read::String->Int) (words (head contents))
           colLength = length rowInt
+
+
 
 --Function for "too-near penalties:"
 --Checks for Invalid Values
 tooNearPenFunc :: [String] -> Int -> [[Bool]] -> [[Bool]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> (Constraint, [(Int,Int)], String)
 tooNearPenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 | trace ("tooNearPenFunc " ++ show flag) False = undefined
 tooNearPenFunc contents flag tooNear forbidden tooNearPen machinePen forced1 forced2 
-    | null contents                  = isEmpty contents flag tooNear forbidden tooNearPen machinePen forced1 forced2                                           --If nothing, return normally
+    | null contents                  = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2                                           --If nothing, return normally
     | null (words (head contents))   = isEmpty contents (flag+1) tooNear forbidden tooNearPen machinePen forced1 forced2
     | length (head contents) < 6     = isEmpty [] 10 tooNear forbidden tooNearPen machinePen forced1 forced2                                                   --If length is less than 6"(A,B,345345)
     | task1 == (-1) || task2 == (-1) = isEmpty [] 12 tooNear forbidden tooNearPen machinePen forced1 forced2
@@ -178,7 +177,6 @@ status flag
     | flag == 10 = "invalid machine/task\n"
     | flag == 11 = "invalid penalty\n"
     | flag == 12 = "invalid task\n"
-    | flag == 13 = "partial assignment error\n"
     | otherwise = ""
 
 
