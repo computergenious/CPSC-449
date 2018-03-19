@@ -4,4 +4,4 @@ to compile:
   ghc main.hs
 
 to run:
-  ./main tests/<testFileInputName> <fileOutputName>
+  ./main tests/testFileInputName fileOutputName
