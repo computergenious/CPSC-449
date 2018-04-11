@@ -23,26 +23,19 @@ tooNearPenTitle("too-near penalities").
 %Compare is only for comparing the Name of each section
 %Compare each ascii character
 %If Error asserts parsing error
+%
 compare([],[]):- !, write('Compare Succesful'),nl.
 compare([H1|T1], [H2|T2]):-
 	%write('compare: '), write(H1),write(' to '), write(H2), nl,
 	H1 == H2 
-		-> compare(T1, T2) 
-		; asserta(error('Error while parsing input file')), write('FAIL').
+		-> compare(T1, T2)
+		; asserta(error('Error while parsing input file')), nl,write('Parsing Error'),nl.
 
 		
-%TEST FOR READ LINE UNTIL \n        [78,97,109,101,58]
-file(File) :-					
-	open(File, read, Stream),
-	readLine_code(Stream, Line),
-	write('Line: '),
-	write(Line),
-	get_code(Stream, Char),
-	%write(Char).
-	close(Stream).
 
 %readLine_code
-	%Takes FileStream and returns List of ascii values for 1 Line
+%Takes FileStream and returns List of ascii values for 1 Line
+%
 readLine_code(Stream, Line) :-
 	CharList = [],
 	readChar_code(Stream, CharList, Line).
@@ -51,7 +44,7 @@ readChar_code(Stream, CharList, Line):-
 	get_code(Stream, Char),
 	isOK(Stream, Char, CharList, Line).
 	
-isOK(Stream, 10, CharList, Line):-
+isOK(_, 10, CharList, Line):-
 	Line = CharList.
 isOK(Stream, Char, CharList, Line) :-
 	append(CharList, [Char], X),
@@ -65,6 +58,7 @@ isOK(Stream, Char, CharList, Line) :-
 
 %---Beginning---
 %Opens file ready to be read
+%
 read_from_file(File) :-					
 	open(File, read, Stream),
 	read_name(Stream),
@@ -90,8 +84,7 @@ read_name_2(Stream):-
 	write('DONE NAME'),nl,nl,
 	skip_line_forced(Stream).			%Continues to next section
 
-
-the_Name(Stream, 10):-
+the_Name(_, 10):-
 	write('End of Name found'),nl.
 the_Name(Stream, _):-
 	get_code(Stream, Char),
@@ -100,8 +93,9 @@ the_Name(Stream, _):-
 	
 
 
-
-skip_line_forced(Stream) :-				%Function to skip all \n before forced
+%Function to skip all \n before forced
+%
+skip_line_forced(Stream) :-				
 	get_code(Stream, Char),
 	skip_line_forced(Stream, Char).
 
@@ -114,29 +108,50 @@ skip_line_forced(Stream, Char) :-		%If Char is something, send to forced
 
 
 
+
 %---Reads "forced partial assignment"---
 read_forced(Stream, Char1):-
 	write('----- forced partial assignment -----'), nl,
 	readLine_code(Stream, List),
-	write('forced List:  '), write(List), nl,
 	forcedPartialAssignTitle(X),
-	write('Expect List:  '), write(X), nl,
 	append([Char1],List, List2),
+	write('forced List:  '), write(List2), nl,
+	write('Expect List:  '), write(X), nl,
 	compare(List2, X),
 	read_forced_math(Stream).
 	
-%ADD FORCED PARTIAL STUFF HERE----------------------------------------
-read_forced_math(Stream) :-
-	get_code(Stream, Char),
-	%stuff
-	%Should stop when \n\n is found
-	write('End of Forced'), nl, nl,
-	skip_line_forbidden(Stream).			%Continues to the next section
 
+read_forced_math(Stream) :-
+	readLine_code(Stream, Line),
+	forced_MaybeEnd(Stream, Line).
+	
+
+forced_MaybeEnd(Stream, []):-
+	write('End of Forced'), nl, nl,		%Should stop when \n\n is found
+	skip_line_forbidden(Stream).
+forced_MaybeEnd(Stream, [32]):-			%Space is found, Do nothing and continue
+	write('End of Forced'), nl, nl,		%Should stop when \n\n is found
+	skip_line_forbidden(Stream).
+forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
+	length(Line, Len),
+	\+ Len = 5 	
+		-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  X < 65 	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  X > 72	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  Y < 48	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  Y > 55	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  asserta(partialAssignment(X,Y)),
+	read_forced_math(Stream).
+	
 
 
 %Skips \n before forbidden
-skip_line_forbidden(Stream) :-				%Function to skip all \n before forced
+skip_line_forbidden(Stream) :-				%Function to skip all \n before forbidden
 	get_code(Stream, Char),
 	skip_line_forbidden(Stream, Char).
 
@@ -144,7 +159,7 @@ skip_line_forbidden(Stream, 10):-			%If Char is \n(10), continue skipping
 	skip_line_forbidden(Stream).
 skip_line_forbidden(Stream, 32):-			%If Char is ' '(32), continue skipping
 	skip_line_forbidden(Stream).
-skip_line_forbidden(Stream, Char) :-		%If Char is something, send to forced
+skip_line_forbidden(Stream, Char) :-		%If Char is something, send to forbidden
 	read_forbidden(Stream, Char).			
 
 
@@ -153,21 +168,44 @@ skip_line_forbidden(Stream, Char) :-		%If Char is something, send to forced
 read_forbidden(Stream, Char1):-
 	write('----- forbidden machine: -----'), nl,
 	readLine_code(Stream, List),
-	write('forbidden List: '), write(List), nl,
 	forbiddenTitle(X),
-	write('Expect List:    '), write(X), nl,
 	append([Char1],List, List2),
+	write('forbidden List: '), write(List2), nl,
+	write('Expect List:    '), write(X), nl,
 	compare(List2, X),
 	read_forbidden_math(Stream).
 
-%ADD STUFF HERE ----------------------------------------
-read_forbidden_math(Stream) :-
-	get_code(Stream, Char),
-	%stuff
-	%Should stop when \n\n is found
-	write('End of Forbidden'), nl, nl,
-	skip_line_tooNear(Stream).			%Continues to the next section
 
+
+read_forbidden_math(Stream) :-
+	readLine_code(Stream, Line),
+	forbidden_MaybeEnd(Stream, Line).
+
+forbidden_MaybeEnd(Stream, []):-
+	write('End of Forbidden'), nl, nl,		%Should stop when \n\n is found
+	skip_line_tooNear(Stream).
+forbidden_MaybeEnd(Stream, [32]):-
+	write('End of Forbidden'), nl, nl,		%Should stop when \n\n is found
+	skip_line_tooNear(Stream).
+forbidden_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
+	length(Line, Len),
+	\+ Len = 5 	
+		-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	; [_,X,_,_,_] = Line,
+	  X < 65 	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	; [_,X,_,_,_] = Line,
+	  X > 72	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	; [_,_,_,Y,_] = Line,
+	  Y < 48	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	; [_,_,_,Y,_] = Line,
+	  Y > 55	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  asserta(forbiddenMachine(X,Y)),
+	read_forbidden_math(Stream).
+	
+	
+
+	
 
 
 %Skips \n before TOONEAR
@@ -187,22 +225,45 @@ skip_line_tooNear(Stream, Char) :-		%If Char is something, send to forced
 read_tooNear(Stream, Char1) :-
 	write('----- too-near task: -----'), nl,
 	readLine_code(Stream, List),
-	write('tooNear List: '), write(List), nl,
 	tooNearTitle(X),
-	write('Expect List:  '), write(X), nl,
 	append([Char1],List, List2),
+	write('tooNear List: '), write(List2), nl,
+	write('Expect List:  '), write(X), nl,
 	compare(List2, X),
 	read_tooNear_math(Stream).
 
-%ADDDDD STUFF HERE----------------------------------------
+
 read_tooNear_math(Stream):-
-	get_code(Stream, Char),
-	%stuff
-	%Should stop when \n\n is found
-	write('End of Too Near'), nl, nl,
-	skip_line_machPen(Stream).			%Continues to the next section
+	readLine_code(Stream, Line),
+	tooNear_MaybeEnd(Stream, Line).
 
-
+tooNear_MaybeEnd(Stream, []):-
+	write('End of tooNear'), nl, nl,		%Should stop when \n\n is found
+	skip_line_machPen(Stream).
+tooNear_MaybeEnd(Stream, [32]):-
+	write('End of tooNear'), nl, nl,		%Should stop when \n\n is found
+	skip_line_machPen(Stream).
+tooNear_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
+	length(Line, Len),
+	\+ Len = 5	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	; [_,X,_,_,_] = Line,
+	  X < 48 	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	; [_,X,_,_,_] = Line,
+	  X > 55	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	; [_,_,_,Y,_] = Line,
+	  Y < 48	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	; [_,_,_,Y,_] = Line,
+	  Y > 55	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  asserta(tooNear(X,Y)),
+	read_tooNear_math(Stream).
+	
+	
+	
+	
+	
+	
+	
 	
 %Skips \n before machinePen
 skip_line_machPen(Stream) :-				%Function to skip all \n before forced
@@ -220,10 +281,10 @@ skip_line_machPen(Stream, Char) :-		%If Char is something, send to forced
 read_machPen(Stream, Char1) :-
 	write('----- Machine Pen: -----'), nl,
 	readLine_code(Stream, List),
-	write('machine List: '), write(List), nl,
 	machinePenTitle(X),
-	write('Expect List:  '), write(X), nl,
 	append([Char1],List, List2),
+	write('machine List: '), write(List2), nl,
+	write('Expect List:  '), write(X), nl,
 	compare(List2, X),
 	read_machPen_math(Stream).
 	
@@ -254,16 +315,35 @@ skip_line_tooNearPen(Stream, Char) :-		%If Char is something, send to forced
 read_tooNearPen(Stream, Char1) :-
 	write('----- Too Near Pen: -----'), nl,
 	readLine_code(Stream, List),
-	write('tooNearPen List: '), write(List), nl,
 	tooNearPenTitle(X),
-	write('Expect List:     '), write(X), nl,
 	append([Char1],List, List2),
+	write('tooNearPen List: '), write(List), nl,
+	write('Expect List:     '), write(X), nl,
 	compare(List2, X),
 	read_tooNearPen_math(Stream).
 	
 %ADD STUFF HERE ----------------------------------------
 read_tooNearPen_math(Stream):-
-	get_code(Stream, Char),
-	%stuff
-	%Should stop when \n\n is found
-	write('End of tooNearPen'), nl, nl.
+	readLine_code(Stream, Line),
+	tooNearPen_MaybeEnd(Stream, Line).
+
+
+tooNearPen_MaybeEnd(Stream, []):-
+	write('End of tooNearPen'), nl, nl.		%Should stop when \n\n is found
+tooNearPen_MaybeEnd(Stream, [32]):-
+	write('End of tooNearPen'), nl, nl.		%Should stop when \n\n is found
+tooNearPen_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
+	length(Line, Len),
+	\+ Len < 7	-> assert(error('invalid machine/task')), nl, write('tooNearPen FAIL'),nl
+	; [_,X,_,_,_|T] = Line,
+	  X < 48 	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	; [_,X,_,_,_|T] = Line,
+	  X > 55	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	; [_,_,_,Y,_|T] = Line,
+	  Y < 48	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	; [_,_,_,Y,_|T] = Line,
+	  Y > 55	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	; [_,X,_,Y,_] = Line,
+	  asserta(tooNear(X,Y)),
+	read_tooNearPen_math(Stream).
+	
