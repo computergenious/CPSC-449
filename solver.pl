@@ -238,3 +238,92 @@ getTooNearPen(X,Y,V) :-
 %for testing; manually hard code in constraint facts;
 %setConstraints :- 
 	%asserta()
+	
+
+%check if list is not empty otherwise no valid solution
+checkForNoSol:-
+	bestList([]), %best list empty
+	retract(error(_)), %remove all other error facts present
+	asserta(error(noValidSolution)). %add noValidSolution fact
+checkForNoSol.
+
+%write error message to file is there is one; if not then do nothing	
+parseErrors(none, _). %error(none)
+parseErrors(invalidPartialAssignment, X):- %error(invalidPartialAssignment)
+	writeFile(X,"partial assignment error"),
+	fail.
+parseErrors(invalidMachineTask, X):- %error(invalidMachineTask)
+	writeFile(X,"invalid machine/task"),
+	fail.
+parseErrors(invalidMachinePenalty, X):- %error(invalidMachinePenalty)
+	writeFile(X,"machine penalty error"),
+	fail.
+parseErrors(invalidTask, X):- %error(invalidTask)
+	writeFile(X,"invalid task"),
+	fail.
+parseErrors(invalidPenalty, X):- %error(invalidPenalty)
+	writeFile(X,"invalid penalty"),
+	fail.
+parseErrors(parseError, X):- %error(parseError)
+	writeFile(X,"Error while parsing input file"),
+	fail.
+parseErrors(noValidSolution, X):-
+	writeFile(X,"No valid solution possible!"),
+	fail.
+	
+%format solution 
+solutionformat(FinalOutput):-
+	Output1 = "Solution ",
+	bestlist(X),
+	getElement(1,X,Y1),
+	atom_codes(Y1,Z1),
+	append(Output1,Z1,Output1_),
+	append(Output1_," ",Output2),
+	getElement(2,X,Y2),
+	atom_codes(Y2,Z2),
+	append(Output2,Z2,Output2_),
+	append(Output2_," ",Output3),
+	getElement(3,X,Y3),
+	atom_codes(Y3,Z3),
+	append(Output3,Z3,Output3_),
+	append(Output3_," ",Output4),
+	getElement(4,X,Y4),
+	atom_codes(Y4,Z4),
+	append(Output4,Z4,Output4_),
+	append(Output4_," ",Output5),
+	getElement(5,X,Y5),
+	atom_codes(Y5,Z5),
+	append(Output5,Z5,Output5_),
+	append(Output5_," ",Output6),
+	getElement(6,X,Y6),
+	atom_codes(Y6,Z6),
+	append(Output6,Z6,Output6_),
+	append(Output6_," ",Output7),
+	getElement(7,X,Y7),
+	atom_codes(Y7,Z7),
+	append(Output7,Z7,Output7_),
+	append(Output7_," ",Output8),
+	getElement(8,X,Y8),
+	atom_codes(Y8,Z8),
+	append(Output8,Z8,Output9),
+	append(Output9,"; Quality: ",Output10),
+	bestVal(Y9),
+	number_codes(Y9,Z9),
+	append(Output10,Z9,FinalOutput), !.	
+	
+%get element from list for writing output
+getElement(1,[H|_],H).
+getElement(X,[_|T],Z):-
+	Y is X - 1,
+	getElement(Y,T,Z).
+	
+	
+%write solution to file 
+%pass file and what to write
+writeFile(X,Y):-
+	tell(X),
+	atom_codes(W,Y),
+	write(W),
+	nl,
+	told,
+	!.
