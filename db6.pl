@@ -9,6 +9,7 @@
 	tooNearPenalty/3
 	).	
 
+%----List of Facts----
 nameTitle("Name:").
 forcedPartialAssignTitle("forced partial assignment:").
 forbiddenTitle("forbidden machine:").
@@ -29,6 +30,7 @@ compare([H1|T1], [H2|T2]):-
 		-> compare(T1, T2) 
 		; asserta(error('Error while parsing input file')), write('FAIL').
 
+		
 %TEST FOR READ LINE UNTIL \n        [78,97,109,101,58]
 file(File) :-					
 	open(File, read, Stream),
@@ -39,7 +41,9 @@ file(File) :-
 	%write(Char).
 	close(Stream).
 
-readLine_code(Stream, Line) :-			% returns Line
+%readLine_code
+	%Takes FileStream and returns List of ascii values for 1 Line
+readLine_code(Stream, Line) :-
 	CharList = [],
 	readChar_code(Stream, CharList, Line).
 	
@@ -47,7 +51,6 @@ readChar_code(Stream, CharList, Line):-
 	get_code(Stream, Char),
 	isOK(Stream, Char, CharList, Line).
 	
-
 isOK(Stream, 10, CharList, Line):-
 	Line = CharList.
 isOK(Stream, Char, CharList, Line) :-
@@ -118,7 +121,8 @@ read_forced(Stream, Char1):-
 	write('forced List:  '), write(List), nl,
 	forcedPartialAssignTitle(X),
 	write('Expect List:  '), write(X), nl,
-	compare(List, X),
+	append([Char1],List, List2),
+	compare(List2, X),
 	read_forced_math(Stream).
 	
 %ADD FORCED PARTIAL STUFF HERE----------------------------------------
@@ -152,7 +156,8 @@ read_forbidden(Stream, Char1):-
 	write('forbidden List: '), write(List), nl,
 	forbiddenTitle(X),
 	write('Expect List:    '), write(X), nl,
-	compare(List, X),
+	append([Char1],List, List2),
+	compare(List2, X),
 	read_forbidden_math(Stream).
 
 %ADD STUFF HERE ----------------------------------------
@@ -185,7 +190,8 @@ read_tooNear(Stream, Char1) :-
 	write('tooNear List: '), write(List), nl,
 	tooNearTitle(X),
 	write('Expect List:  '), write(X), nl,
-	compare(List, X),
+	append([Char1],List, List2),
+	compare(List2, X),
 	read_tooNear_math(Stream).
 
 %ADDDDD STUFF HERE----------------------------------------
@@ -217,7 +223,8 @@ read_machPen(Stream, Char1) :-
 	write('machine List: '), write(List), nl,
 	machinePenTitle(X),
 	write('Expect List:  '), write(X), nl,
-	compare(List, X).
+	append([Char1],List, List2),
+	compare(List2, X),
 	read_machPen_math(Stream).
 	
 %AADDD STUFF HERE----------------------------------------
@@ -250,7 +257,8 @@ read_tooNearPen(Stream, Char1) :-
 	write('tooNearPen List: '), write(List), nl,
 	tooNearPenTitle(X),
 	write('Expect List:     '), write(X), nl,
-	compare(List, X).
+	append([Char1],List, List2),
+	compare(List2, X),
 	read_tooNearPen_math(Stream).
 	
 %ADD STUFF HERE ----------------------------------------
