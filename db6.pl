@@ -7,7 +7,7 @@
 	bestVal/1,
 	bestList/1,
 	tooNearPenalty/3
-	).
+	).	
 
 nameTitle("Name:").
 forcedPartialAssignTitle("forced partial assignment:").
@@ -17,7 +17,7 @@ machinePenTitle("machine penalties:").
 tooNearPenTitle("too-near penalities").
 
 
-%List of functions
+%----List of functions----
 
 %Compare is only for comparing the Name of each section
 %Compare each ascii character
@@ -28,7 +28,35 @@ compare([H1|T1], [H2|T2]):-
 	H1 == H2 
 		-> compare(T1, T2) 
 		; asserta(error('Error while parsing input file')), write('FAIL').
+
+%TEST FOR READ LINE UNTIL \n        [78,97,109,101,58]
+file(File) :-					
+	open(File, read, Stream),
+	readLine_code(Stream, Line),
+	write('Line: '),
+	write(Line),
+	get_code(Stream, Char),
+	%write(Char).
+	close(Stream).
+
+readLine_code(Stream, Line) :-			% returns Line
+	CharList = [],
+	readChar_code(Stream, CharList, Line).
 	
+readChar_code(Stream, CharList, Line):-
+	get_code(Stream, Char),
+	isOK(Stream, Char, CharList, Line).
+	
+
+isOK(Stream, 10, CharList, Line):-
+	Line = CharList.
+isOK(Stream, Char, CharList, Line) :-
+	append(CharList, [Char], X),
+	%write('Append: '), write(X),nl,
+	readChar_code(Stream, X, Line).
+	
+	
+
 	
 
 
@@ -44,18 +72,12 @@ read_from_file(File) :-
 %---Reads "Name:"---
 read_name(Stream):-
 	write('----- Name: -----'), nl,
-	get_code(Stream, Char1),% put_char(Char1),
-	get_code(Stream, Char2),% put_char(Char2),
-	get_code(Stream, Char3),% put_char(Char3),
-	get_code(Stream, Char4),% put_char(Char4),
-	get_code(Stream, Char5),% put_char(Char5),
-	List = [Char1, Char2, Char3, Char4, Char5],
+	readLine_code(Stream, List),
 	write('Name List:    '), write(List),nl,
 	%nameTitle([X,Y,Z,W,V]),
 	nameTitle(X),
 	write('Expect List:  '), write(X), nl,
 	compare(List, X),
-	get_code(Stream, Charnl),
 	read_name_2(Stream).
 	
 read_name_2(Stream):-
@@ -92,17 +114,7 @@ skip_line_forced(Stream, Char) :-		%If Char is something, send to forced
 %---Reads "forced partial assignment"---
 read_forced(Stream, Char1):-
 	write('----- forced partial assignment -----'), nl,
-	get_code(Stream, Char2),get_code(Stream, Char3),get_code(Stream, Char4),
-	get_code(Stream, Char5),get_code(Stream, Char6),get_code(Stream, Char7),get_code(Stream, Char8),
-	get_code(Stream, Char9),get_code(Stream, Char10),get_code(Stream, Char11),get_code(Stream, Char12),
-	get_code(Stream, Char13),get_code(Stream, Char14),get_code(Stream, Char15),get_code(Stream, Char16),
-	get_code(Stream, Char17),get_code(Stream, Char18),get_code(Stream, Char19),get_code(Stream, Char20),
-	get_code(Stream, Char21),get_code(Stream, Char22),get_code(Stream, Char23),get_code(Stream, Char24),
-	get_code(Stream, Char25),get_code(Stream, Char26),
-	List = [Char1, Char2, Char3, Char4, Char5, Char6, 
-			Char7, Char8, Char9, Char10, Char11, Char12, 
-			Char13, Char14, Char15, Char16, Char17, Char18, 
-			Char19, Char20, Char21, Char22, Char23, Char24, Char25, Char26],
+	readLine_code(Stream, List),
 	write('forced List:  '), write(List), nl,
 	forcedPartialAssignTitle(X),
 	write('Expect List:  '), write(X), nl,
@@ -136,12 +148,7 @@ skip_line_forbidden(Stream, Char) :-		%If Char is something, send to forced
 %---Reads "forbidden partial assignment"---
 read_forbidden(Stream, Char1):-
 	write('----- forbidden machine: -----'), nl,
-	get_code(Stream, Char2),get_code(Stream, Char3),get_code(Stream, Char4),
-	get_code(Stream, Char5),get_code(Stream, Char6),get_code(Stream, Char7),get_code(Stream, Char8),
-	get_code(Stream, Char9),get_code(Stream, Char10),get_code(Stream, Char11),get_code(Stream, Char12),
-	get_code(Stream, Char13),get_code(Stream, Char14),get_code(Stream, Char15),get_code(Stream, Char16),
-	get_code(Stream, Char17),get_code(Stream, Char18),
-	List = [Char1, Char2, Char3, Char4, Char5, Char6, Char7, Char8, Char9, Char10, Char11, Char12, Char13, Char14, Char15, Char16, Char17, Char18],
+	readLine_code(Stream, List),
 	write('forbidden List: '), write(List), nl,
 	forbiddenTitle(X),
 	write('Expect List:    '), write(X), nl,
@@ -174,11 +181,7 @@ skip_line_tooNear(Stream, Char) :-		%If Char is something, send to forced
 %----Read tooNear----
 read_tooNear(Stream, Char1) :-
 	write('----- too-near task: -----'), nl,
-	get_code(Stream, Char2),get_code(Stream, Char3),get_code(Stream, Char4),
-	get_code(Stream, Char5),get_code(Stream, Char6),get_code(Stream, Char7),get_code(Stream, Char8),
-	get_code(Stream, Char9),get_code(Stream, Char10),get_code(Stream, Char11),get_code(Stream, Char12),
-	get_code(Stream, Char13),get_code(Stream, Char14),get_code(Stream, Char15),
-	List = [Char1, Char2, Char3, Char4, Char5, Char6, Char7, Char8, Char9, Char10, Char11, Char12, Char13, Char14, Char15],
+	readLine_code(Stream, List),
 	write('tooNear List: '), write(List), nl,
 	tooNearTitle(X),
 	write('Expect List:  '), write(X), nl,
@@ -210,12 +213,7 @@ skip_line_machPen(Stream, Char) :-		%If Char is something, send to forced
 %----Read machPen----
 read_machPen(Stream, Char1) :-
 	write('----- Machine Pen: -----'), nl,
-	get_code(Stream, Char2),get_code(Stream, Char3),get_code(Stream, Char4),
-	get_code(Stream, Char5),get_code(Stream, Char6),get_code(Stream, Char7),get_code(Stream, Char8),
-	get_code(Stream, Char9),get_code(Stream, Char10),get_code(Stream, Char11),get_code(Stream, Char12),
-	get_code(Stream, Char13),get_code(Stream, Char14),get_code(Stream, Char15),get_code(Stream, Char16),
-	get_code(Stream, Char17),get_code(Stream, Char18),
-	List = [Char1, Char2, Char3, Char4, Char5, Char6, Char7, Char8, Char9, Char10, Char11, Char12, Char13, Char14, Char15, Char16, Char17, Char18],
+	readLine_code(Stream, List),
 	write('machine List: '), write(List), nl,
 	machinePenTitle(X),
 	write('Expect List:  '), write(X), nl,
@@ -248,15 +246,7 @@ skip_line_tooNearPen(Stream, Char) :-		%If Char is something, send to forced
 %----Read TooNearPen----
 read_tooNearPen(Stream, Char1) :-
 	write('----- Too Near Pen: -----'), nl,
-	get_code(Stream, Char2),get_code(Stream, Char3),get_code(Stream, Char4),
-	get_code(Stream, Char5),get_code(Stream, Char6),get_code(Stream, Char7),get_code(Stream, Char8),
-	get_code(Stream, Char9),get_code(Stream, Char10),get_code(Stream, Char11),get_code(Stream, Char12),
-	get_code(Stream, Char13),get_code(Stream, Char14),get_code(Stream, Char15),get_code(Stream, Char16),
-	get_code(Stream, Char17),get_code(Stream, Char18),get_code(Stream, Char19),
-	List = [Char1, Char2, Char3, Char4, Char5, Char6, 
-			Char7, Char8, Char9, Char10, Char11, Char12, 
-			Char13, Char14, Char15, Char16, Char17, Char18, 
-			Char19],
+	readLine_code(Stream, List),
 	write('tooNearPen List: '), write(List), nl,
 	tooNearPenTitle(X),
 	write('Expect List:     '), write(X), nl,
