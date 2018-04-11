@@ -9,6 +9,33 @@
 	tooNearPenalty/3
 	).	
 
+%TO-DO:
+%Error(X), parseErrors(X, Output). OR only assertz for errors
+%Output Stream everywhere
+%Machine Pen
+%too Near Task
+/*
+masdf(Row, Col){
+	
+MASDF(Row, Col, 32) %Space
+	%do shit
+	masdf(row, Col+1)
+
+
+
+masdf(Row,Col, 10) %\n Change row
+check_for_spaces(, , 10):-
+	getnext(),
+	check for spaces(row, col)
+check for spaces(, , _):-
+	masdf(row, col+1)
+	assert(machine(Row,col, Val)
+
+masdf(Row+1, 0)
+*/
+
+
+
 %----List of Facts----
 nameTitle("Name:").
 forcedPartialAssignTitle("forced partial assignment:").
@@ -29,7 +56,7 @@ compare([H1|T1], [H2|T2]):-
 	%write('compare: '), write(H1),write(' to '), write(H2), nl,
 	H1 == H2 
 		-> compare(T1, T2)
-		; asserta(error('Error while parsing input file')), nl,write('Parsing Error'),nl.
+		; assertz(error('Error while parsing input file')), nl,write('Parsing Error'),nl.
 
 		
 
@@ -135,15 +162,15 @@ forced_MaybeEnd(Stream, [32]):-			%Space is found, Do nothing and continue
 forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	length(Line, Len),
 	\+ Len = 5 	
-		-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+		-> assertz(error('invalid machine/task')), nl, write('forced FAIL'),nl
 	; [_,X,_,Y,_] = Line,
-	  X < 65 	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	  X < 65 	-> assertz(error('invalid machine/task')), nl, write('forced FAIL'),nl
 	; [_,X,_,Y,_] = Line,
-	  X > 72	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	  X > 72	-> assertz(error('invalid machine/task')), nl, write('forced FAIL'),nl
 	; [_,X,_,Y,_] = Line,
-	  Y < 48	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	  Y < 48	-> assertz(error('invalid machine/task')), nl, write('forced FAIL'),nl
 	; [_,X,_,Y,_] = Line,
-	  Y > 55	-> assert(error('invalid machine/task')), nl, write('forced FAIL'),nl
+	  Y > 55	-> assertz(error('invalid machine/task')), nl, write('forced FAIL'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(partialAssignment(X,Y)),
 	read_forced_math(Stream).
@@ -179,7 +206,8 @@ read_forbidden(Stream, Char1):-
 
 read_forbidden_math(Stream) :-
 	readLine_code(Stream, Line),
-	forbidden_MaybeEnd(Stream, Line).
+	forbidden_MaybeEnd(Stream, Line),
+	listing(forbiddenMachine(X,Y)).
 
 forbidden_MaybeEnd(Stream, []):-
 	write('End of Forbidden'), nl, nl,		%Should stop when \n\n is found
@@ -190,17 +218,17 @@ forbidden_MaybeEnd(Stream, [32]):-
 forbidden_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	length(Line, Len),
 	\+ Len = 5 	
-		-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+		-> assertz(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
 	; [_,X,_,_,_] = Line,
-	  X < 65 	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	  X < 65 	-> assertz(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
 	; [_,X,_,_,_] = Line,
-	  X > 72	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	  X > 72	-> assertz(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y < 48	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	  Y < 48	-> assertz(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y > 55	-> assert(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
+	  Y > 55	-> assertz(error('invalid machine/task')), nl, write('Forbidden FAIL'),nl
 	; [_,X,_,Y,_] = Line,
-	  asserta(forbiddenMachine(X,Y)),
+	  asserta(forbiddenMachine(X,Y)), write('assert: '), write(X), write(Y), nl,
 	read_forbidden_math(Stream).
 	
 	
@@ -245,15 +273,15 @@ tooNear_MaybeEnd(Stream, [32]):-
 	skip_line_machPen(Stream).
 tooNear_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	length(Line, Len),
-	\+ Len = 5	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	\+ Len = 5	-> assertz(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
 	; [_,X,_,_,_] = Line,
-	  X < 48 	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	  X < 48 	-> assertz(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
 	; [_,X,_,_,_] = Line,
-	  X > 55	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	  X > 55	-> assertz(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y < 48	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	  Y < 48	-> assertz(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y > 55	-> assert(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
+	  Y > 55	-> assertz(error('invalid machine/task')), nl, write('tooNear FAIL'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(tooNear(X,Y)),
 	read_tooNear_math(Stream).
@@ -334,15 +362,15 @@ tooNearPen_MaybeEnd(Stream, [32]):-
 	write('End of tooNearPen'), nl, nl.		%Should stop when \n\n is found
 tooNearPen_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	length(Line, Len),
-	\+ Len < 7	-> assert(error('invalid machine/task')), nl, write('tooNearPen FAIL'),nl
+	\+ Len < 7	-> assertz(error('invalid machine/task')), nl, write('tooNearPen FAIL'),nl
 	; [_,X,_,_,_|T] = Line,
-	  X < 48 	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  X < 48 	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,X,_,_,_|T] = Line,
-	  X > 55	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  X > 55	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,_,_,Y,_|T] = Line,
-	  Y < 48	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  Y < 48	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,_,_,Y,_|T] = Line,
-	  Y > 55	-> assert(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  Y > 55	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(tooNear(X,Y)),
 	read_tooNearPen_math(Stream).
