@@ -112,7 +112,7 @@ isOK(Stream, Char, CharList, Line) :-
 read_from_file(File) :-					
 	open(File, read, Stream),
 	read_name(Stream),
-	write('DONE EVERTHINGSDLKFSJLDKFJSDf'),
+	write('DONE PARSING'),
 	close(Stream).
 
 
@@ -630,7 +630,7 @@ getTooNearPen(X,Y,V) :-
 checkForNoSol:-
 	bestList([]), %best list empty
 	retract(error(_)), %remove all other error facts present
-	asserta(error(noValidSolution)). %add noValidSolution fact
+	assertz(error(noValidSolution)). %add noValidSolution fact
 checkForNoSol.
 
 %write error message to file is there is one; if not then do nothing	
