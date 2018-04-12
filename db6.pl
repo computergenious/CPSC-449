@@ -57,7 +57,8 @@ compare([H1|T1], [H2|T2]):-
 	H1 == H2 
 		-> compare(T1, T2)
 		; assertz(error('Error while parsing input file')), nl,write('Parsing Error'),nl.
-
+		
+		%assertz(error(parseError))
 		
 
 %readLine_code
@@ -175,7 +176,7 @@ forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	  asserta(partialAssignment(X,Y)),
 	read_forced_math(Stream).
 	
-
+	%assertz(error(invalidMachineTask))
 
 %Skips \n before forbidden
 skip_line_forbidden(Stream) :-				%Function to skip all \n before forbidden
@@ -231,7 +232,7 @@ forbidden_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	  asserta(forbiddenMachine(X,Y)), write('assert: '), write(X), write(Y), nl,
 	read_forbidden_math(Stream).
 	
-	
+	%assertz(error(invalidMachineTask))
 
 	
 
@@ -286,9 +287,7 @@ tooNear_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	  asserta(tooNear(X,Y)),
 	read_tooNear_math(Stream).
 	
-	
-	
-	
+	%assertz(error(invalidMachineTask))
 	
 	
 	
@@ -375,3 +374,10 @@ tooNearPen_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	  asserta(tooNear(X,Y)),
 	read_tooNearPen_math(Stream).
 	
+	%assertz(error(invalidMachineTask))
+	%assertz(error(invalidTask))
+	
+	
+	%FOR REMAINING ERROR MESSAGES
+	%assertz(error(invalidPenalty))  => error for number in both penalties is not a natural number
+	%assertz(error(invalidMachinePenalty))  => error for rows and columns in machine penalty constraint =/= 8
