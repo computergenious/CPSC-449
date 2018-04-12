@@ -236,8 +236,7 @@ read_forbidden(Stream, Char1):-
 
 read_forbidden_math(Stream) :-
 	readLine_code(Stream, Line),
-	forbidden_MaybeEnd(Stream, Line),
-	listing(forbiddenMachine(X,Y)).
+	forbidden_MaybeEnd(Stream, Line).
 
 forbidden_MaybeEnd(Stream, []):-
 	write('End of Forbidden'), nl, nl,		%Should stop when \n\n is found
