@@ -191,13 +191,13 @@ forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	\+ Len = 5 	
 		-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 1'),nl
 	; [_,X,_,Y,_] = Line,
-	  X < 65 	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 2'),nl
+	  X < 49 	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 2'),nl
 	; [_,X,_,Y,_] = Line,
-	  X > 72	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 3'),nl
+	  X > 56	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 3'),nl
 	; [_,X,_,Y,_] = Line,
-	  Y < 48	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 4'),nl
+	  Y < 65	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 4'),nl
 	; [_,X,_,Y,_] = Line,
-	  Y > 55	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 5'),nl
+	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(partialAssignment(X,Y)), write('assert: '), write(X), tab(1), write(Y),nl,
 	read_forced_math(Stream).
@@ -249,13 +249,13 @@ forbidden_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	\+ Len = 5 	
 		-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 1'),nl
 	; [_,X,_,_,_] = Line,
-	  X < 65 	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 2'),nl
+	  X < 49 	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 2'),nl
 	; [_,X,_,_,_] = Line,
-	  X > 72	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 3'),nl
+	  X > 56	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 3'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y < 48	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 4'),nl
+	  Y < 65	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 4'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y > 55	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 5'),nl
+	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(forbiddenMachine(X,Y)), write('assert: '), write(X), tab(1), write(Y), nl,
 	read_forbidden_math(Stream).
@@ -307,13 +307,13 @@ tooNear_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	length(Line, Len),
 	\+ Len = 5	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 1'),nl
 	; [_,X,_,_,_] = Line,
-	  X < 48 	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 2'),nl
+	  X < 65 	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 2'),nl
 	; [_,X,_,_,_] = Line,
-	  X > 55	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 3'),nl
+	  X > 72	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 3'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y < 48	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 4'),nl
+	  Y < 65	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 4'),nl
 	; [_,_,_,Y,_] = Line,
-	  Y > 55	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 5'),nl
+	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(tooNear(X,Y)), write('assert: '), write(X), tab(1), write(Y), nl,
 	read_tooNear_math(Stream).
