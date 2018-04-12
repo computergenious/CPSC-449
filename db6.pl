@@ -414,7 +414,7 @@ read_tooNearPen(Stream, Char1) :-
 	append([Char1],List, List2),
 	write('tooNearPen List: '), write(List2), nl,
 	write('Expect List:     '), write(X), nl,
-	compare(List2, X),
+	compare(List2, X), nl,
 	write('Start tooNearPen Math'),nl,
 	read_tooNearPen_math(Stream).
 	
@@ -433,20 +433,41 @@ tooNearPen_MaybeEnd(Stream, []):-
 tooNearPen_MaybeEnd(Stream, [32]):-
 	write('End of tooNearPen'), nl, nl.		%Should stop when \n\n is found
 tooNearPen_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
+	write('tooNearPen Line: '), write(Line), nl,
 	length(Line, Len),
-	\+ Len < 7	-> assertz(error('invalid machine/task')), nl, write('tooNearPen FAIL'),nl
+	Len < 7	-> assertz(error('invalid machine/task')), nl, write('tooNearPen FAIL'),nl
 	; [_,X,_,_,_|T] = Line,
-	  X < 48 	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  X < 65 	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,X,_,_,_|T] = Line,
-	  X > 55	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  X > 72	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,_,_,Y,_|T] = Line,
-	  Y < 48	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	  Y < 65	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
 	; [_,_,_,Y,_|T] = Line,
-	  Y > 55	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
-	; [_,X,_,Y,_] = Line,
-	  asserta(tooNear(X,Y)),
+	  Y > 72	-> assertz(error('invalid task')), nl, write('tooNearPen FAIL'),nl
+	; [_,X,_,Y,_|T] = Line,
+	tooNearPenGet(Line, Val),
+	write('assert: '), write(X), tab(1), write(Y), tab(1), write(Val), nl,
+	asserta(tooNearPenalty(X,Y,Val)),
 	read_tooNearPen_math(Stream).
+
+
+tooNearPenGet([_,_,_,_,_|Num], Val):-
+	write('START tooNearPenGet'),nl, write('Num List: '), write(Num), nl,
+	tooNearPenGetCheck(Num, [], Val).
+
+tooNearPenGetCheck([], Good, Val) :-
+	assertz(error('invalidPenaltysdfs')), nl, write('tooNearPen Pen FAIL'), nl.
+tooNearPenGetCheck([H|T], Good, Val):-
+	H == 41 ->  number_chars(Val, Good)
+	; H < 48 -> assertz(error('invalidPenaltysdfs')), nl, write('tooNearPen Pen FAIL'), nl
+	; H > 57 -> assertz(error('invalidPenaltysdfs')), nl, write('tooNearPen Pen FAIL'), nl
+	; 
+	char_code(Char, H),
+	append(Good, [Char], NewGood),
+	tooNearPenGetCheck(T, NewGood, Val).
 	
+
+
 	%assertz(error(invalidMachineTask))
 	%assertz(error(invalidTask))
 	
