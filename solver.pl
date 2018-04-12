@@ -33,6 +33,7 @@ start(X,Y) :-
 	read_from_file(X),			%pass file to be read and parsed
 	!,
 	error(Z),					%check if any errors appeared when parsing
+	nl,nl, write('ERRORS AFTER PARSING: '), nl, forall(error(ABS), (write(ABS),nl)),
 	!,
 	parseErrors(Z,Y),			%writes parsing errors to file if any and stop program; if only none then do nothing
 	retractall(error(_)),		%removes any errors just to make to make sure 
@@ -40,6 +41,7 @@ start(X,Y) :-
 	branchBound, 				%branch and bound begins
 	checkForNoSol, 				%checks current solution and if empty then add no valid solution error
 	error(A), 					%check if error rule present
+	nl,nl, write('ERRORS AFTER BRANCH: '), nl, forall(error(ABS), (write(ABS),nl)),
 	!,
 	parseErrors(A,Y), 			%writes no valid solution error to file if any and stop program; if only none then do nothing
 	retract(error(_)), 			%removes any errors just to make to make sure 
@@ -69,7 +71,7 @@ compare([H1|T1], [H2|T2]):-
 	%write('compare: '), write(H1),write(' to '), write(H2), nl,
 	H1 == H2 
 		-> compare(T1, T2)
-		; assertz(error('Error while parsing input file')), nl,write('Parsing Error'),nl.
+		; assertz(error(parseError)), nl,write('Parsing Error'),nl.
 		
 		%assertz(error(parseError))
 		
