@@ -12,31 +12,7 @@
 %TO-DO:
 %Error(X), parseErrors(X, Output). OR only assertz for errors
 %Output Stream everywhere
-%Machine Pen
-%too Near Task
 /*
-masdf(Row, Col){
-	
-MASDF(Row, Col, 32) %Space
-	%do shit
-	masdf(row, Col+1)
-
-
-
-masdf(Row,Col, 10) %\n Change row
-check_for_spaces(, , 10):-
-	getnext(),
-	check for spaces(row, col)
-check for spaces(, , _):-
-	masdf(row, col+1)
-	assert(machine(Row,col, Val)
-
-masdf(Row+1, 0)
-*/
-
-
-
-
 
 
 
