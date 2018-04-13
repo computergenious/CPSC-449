@@ -404,7 +404,7 @@ read_machPen_math(Stream):-
 	%CHECK NUMBER OF ASSERTS FOR MACHPEN
 	factCount(Num),
 	\+ Num == 64 -> assertz(error(invalidMachinePenalty)), nl, write('machine Assert FAIL'), nl
-	write('Num of Machine Asserts: '), write(Num), nl, nl,
+	; write('Num of Machine Asserts: '), write(Num), nl, nl,
 	skip_line_tooNearPen(Stream).			%Continues to the next section
 
 factCount(Num) :- 
