@@ -2,4 +2,4 @@
 
 To compile: gplc main.pl
 
-To run: ./main <inputFile> <outputFile>
+To run: ./main inputFile outputFile
