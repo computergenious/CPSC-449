@@ -241,10 +241,16 @@ forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	char_code(NumC, X),
 	number_chars(Num, [NumC]),
 	char_code(Lett, Y),
-	  asserta(partialAssignment(Num,Lett)), 
-	  write('assert: '), write(X), tab(1), write(Y),nl,
+	checkForForcedPartial(Num, Lett),
+	asserta(partialAssignment(Num,Lett)), 
+	write('assert: '), write(X), tab(1), write(Y),nl,
 	read_forced_math(Stream).
-	
+
+%Checks to see if two machines forced to one task or two tasks to one machine
+checkForForcedPartial(Num, Lett) :-
+	partialAssignment(Num, _) -> assertz(error(invalidPartialAssignment));
+	partialAssignment(_,Lett) -> assertz(error(invalidPartialAssignment));
+	!.
 	%assertz(error(invalidMachineTask))
 
 %Skips \n before forbidden
