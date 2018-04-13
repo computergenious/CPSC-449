@@ -420,7 +420,7 @@ machPenAssertStart(Stream) :-
 machPenAssertLeft(Stream, Row, Col, List) :-
 %write('Row: '), write(Row), nl,
 %write('Col: '), write(Col), nl,
-	Row > 8 -> assertz(error(invalidMachinePenalty)), write('Done MachinePenAssert'), nl
+	Row > 8 -> write('Done MachinePenAssert'), nl
 	; get_code(Stream, Char),
 	machPenAssertWHAT(Stream, Row, Col, List, Char).
 
