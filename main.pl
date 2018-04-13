@@ -238,7 +238,11 @@ forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	; [_,_,_,Y,_] = Line,
 	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
-	  asserta(partialAssignment(X,Y)), write('assert: '), write(X), tab(1), write(Y),nl,
+	char_code(NumC, X),
+	number_chars(Num, [NumC]),
+	char_code(Lett, Y),
+	  asserta(partialAssignment(Num,Lett)), 
+	  write('assert: '), write(X), tab(1), write(Y),nl,
 	read_forced_math(Stream).
 	
 	%assertz(error(invalidMachineTask))
@@ -296,7 +300,10 @@ forbidden_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	; [_,_,_,Y,_] = Line,
 	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('Forbidden FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
-	  asserta(forbiddenMachine(X,Y)), write('assert: '), write(X), tab(1), write(Y), nl,
+	  char_code(NumC, X),
+	  number_chars(Num, [NumC]),
+	  char_code(Lett, Y),
+	  asserta(forbiddenMachine(Num,Lett)), write('assert: '), write(X), tab(1), write(Y), nl,
 	read_forbidden_math(Stream).
 	
 	%assertz(error(invalidMachineTask))
@@ -354,7 +361,9 @@ tooNear_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	; [_,_,_,Y,_] = Line,
 	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('tooNear FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
-	  asserta(tooNear(X,Y)), write('assert: '), write(X), tab(1), write(Y), nl,
+	char_code(Lett1, X),
+	char_code(Lett2, Y),
+	  asserta(tooNear(Lett1,Lett2)), write('assert: '), write(X), tab(1), write(Y), nl,
 	read_tooNear_math(Stream).
 	
 	%assertz(error(invalidMachineTask))
@@ -494,9 +503,11 @@ tooNearPen_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	; [_,_,_,Y,_|T] = Line,
 	  Y > 72	-> assertz(error(invalidTask)), nl, write('tooNearPen FAIL 5'),nl
 	; [_,X,_,Y,_|T] = Line,
+	char_code(Lett1, X),
+	char_code(Lett2, Y),
 	tooNearPenGet(Line, Val),
 	write('assert: '), write(X), tab(1), write(Y), tab(1), write(Val), nl,
-	asserta(tooNearPenalty(X,Y,Val)),
+	asserta(tooNearPenalty(Lett1,Lett2,Val)),
 	read_tooNearPen_math(Stream).
 
 
