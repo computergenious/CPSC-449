@@ -1,3 +1,30 @@
+/* Current Results of files
+
+-garbage.txt						Error while parsing input file
+-invalid2.txt					
+-invalidforbidden.txt			
+-invalidtoonear.txt
+-machpen1.txt
+-machpen2.txt
+-minimalisticexample.txt
+-nochoice.txt
+-nochoice2.txt
+-optzero.txt
+-toonearpen1.txt
+-toonearpen2.txt
+-wrongkeyword.txt
+-wrongkeyword2.txt
+-wrongmachine.txt
+-wrongmachpenalty1.txt
+-wrongmachpenalty2.txt
+-wrongnumbermachine.txt
+-wrongnumbertoonear.txt
+-wrongpartialassignment.txt
+-wrongtask.txt
+-wrongtooneartask.txt
+
+*/
+
 :- dynamic(
 	error/1,
 	partialAssignment/2,
@@ -22,6 +49,15 @@ taskLetter('E').
 taskLetter('F').
 taskLetter('G').
 taskLetter('H').
+
+taskToLetter(1,'A').
+taskToLetter(2,'B').
+taskToLetter(3,'C').
+taskToLetter(4,'D').
+taskToLetter(5,'E').
+taskToLetter(6,'F').
+taskToLetter(7,'G').
+taskToLetter(8,'H').
 
 %starts program right away and gets file arguments from command line; passes arguments on to "main" 
 :- initialization(getArguments).
@@ -193,13 +229,13 @@ forced_MaybeEnd(Stream, Line):-			%Not \n -- [40,65,44,56,41]
 	length(Line, Len),
 	\+ Len = 5 	
 		-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 1'),nl
-	; [_,X,_,Y,_] = Line,
+	; [_,X,_,_,_] = Line,
 	  X < 49 	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 2'),nl
-	; [_,X,_,Y,_] = Line,
+	; [_,X,_,_,_] = Line,
 	  X > 56	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 3'),nl
-	; [_,X,_,Y,_] = Line,
+	; [_,_,_,Y,_] = Line,
 	  Y < 65	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 4'),nl
-	; [_,X,_,Y,_] = Line,
+	; [_,_,_,Y,_] = Line,
 	  Y > 72	-> assertz(error(invalidMachineTask)), nl, write('forced FAIL 5'),nl
 	; [_,X,_,Y,_] = Line,
 	  asserta(partialAssignment(X,Y)), write('assert: '), write(X), tab(1), write(Y),nl,
@@ -382,13 +418,15 @@ machPenAssertWHAT(Stream, Row, Col, List, 10):-					%n\ is found
 	List == [] 	-> Row2 is Row + 1, machPenAssertLeft(Stream, Row2, 1, [])
 	; number_chars(Val, List),
 write('MACH ASSERT: '), write(Row), tab(1), write(Col), tab(1), write(Val), nl, 
-	assertz(machinePenalty(Row, Col, Val)),
+	taskToLetter(Col, Lett),
+	assertz(machinePenalty(Row, Lett, Val)),
 	Row2 is Row + 1, machPenAssertLeft(Stream, Row2, 1, []).
 machPenAssertWHAT(Stream, Row, Col, List, 32):-					%Space is found
 	List == [] 	-> machPenAssertLeft(Stream, Row, Col, [])
 	; number_chars(Val, List),
 write('MACH ASSERT: '), write(Row), tab(1), write(Col), tab(1), write(Val),nl, 
-	assertz(machinePenalty(Row, Col, Val)),
+	taskToLetter(Col, Lett),
+	assertz(machinePenalty(Row, Lett, Val)),
 	Col2 is Col + 1, machPenAssertLeft(Stream, Row, Col2, []).
 machPenAssertWHAT(Stream, Row, Col, List, Char):-
 	Char < 48   -> assertz(error(invalidMachineTask)), nl, write('machine FAIL 1'),nl
@@ -440,9 +478,9 @@ read_tooNearPen_math(Stream):-
 
 
 tooNearPen_MaybeEnd(Stream, []):-
-	write('End of tooNearPen'), nl, nl.		%Should stop when \n\n is found
+	read_tooNearPen_math(Stream).		%Should stop when \n\n is found
 tooNearPen_MaybeEnd(Stream, [32]):-
-	write('End of tooNearPen'), nl, nl.		%Should stop when \n\n is found
+	read_tooNearPen_math(Stream).		%Should stop when \n\n is found
 tooNearPen_MaybeEnd(Stream, Line):-			%Not \n -- [40,50,44,55,41]
 	write('tooNearPen Line: '), write(Line), nl,
 	length(Line, Len),
