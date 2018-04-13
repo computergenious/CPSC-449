@@ -420,9 +420,17 @@ machPenAssertStart(Stream) :-
 machPenAssertLeft(Stream, Row, Col, List) :-
 %write('Row: '), write(Row), nl,
 %write('Col: '), write(Col), nl,
-	Row > 8 -> write('Done MachinePenAssert'), nl
+	Row > 8 -> machPenAssertRow(Stream)
 	; get_code(Stream, Char),
 	machPenAssertWHAT(Stream, Row, Col, List, Char).
+
+	
+%Checks for anything after 8 rows that is not a newLine
+machPenAssertRow(Stream) :-
+	get_code(Stream, Char),
+	\+ Char == 10 ->  assertz(error(invalidMachinePenalty)), write('machine Pen Row FAIL'), nl
+	; write('Done MachinePenAssert').
+	
 
 machPenAssertWHAT(Stream, Row, Col, List, 10):-					%n\ is found
 	List == [] 	-> Row2 is Row + 1, machPenAssertLeft(Stream, Row2, 1, [])
