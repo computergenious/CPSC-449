@@ -479,9 +479,15 @@ skip_line_tooNearPen(Stream, Char) :-		%If Char is something, send to forced
 	write('CharFound: '), write(Char), nl,
 	read_tooNearPen(Stream, Char).	
 	
-	
+
+checkMachPenTotal(X) :-
+	factCount(Num),
+	Num =\= 64 -> assertz(error(invalidMachinePenalty));
+	!.
+
 %----Read TooNearPen----
 read_tooNearPen(Stream, Char1) :-
+	checkMachPenTotal(Num),
 	write('----- Too Near Pen: -----'), nl,
 	readLine_code(Stream, List),
 	tooNearPenTitle(X),
